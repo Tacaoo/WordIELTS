@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>WordIELTS</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  :root{
+    --bg:#0f0f13;--surface:#1a1a24;--surface2:#22222e;--border:#2a2a38;
+    --text:#f0efff;--sub:#8888aa;--accent:#7c5cfc;--green:#10b981;
+    --amber:#f59e0b;--red:#ef4444;--nav:#13131a;
+  }
+  .light{
+    --bg:#f8f7f4;--surface:#ffffff;--surface2:#f0eff8;--border:#e5e4f0;
+    --text:#1a1a2e;--sub:#666688;--nav:#ffffff;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100dvh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;}
+  header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--nav);position:sticky;top:0;z-index:10;}
+  .logo{font-size:18px;font-weight:800;background:linear-gradient(135deg,#7c5cfc,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .streak{display:flex;align-items:center;gap:4px;background:#1f1500;border:1px solid #3d2800;border-radius:20px;padding:4px 10px;font-size:13px;font-weight:700;color:#f59e0b;}
+  .light .streak{background:#fff7e6;border-color:#fbbf24;}
+  nav{display:flex;background:var(--nav);border-top:1px solid var(--border);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:10;}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 10px;cursor:pointer;gap:3px;color:var(--sub);font-size:10px;font-weight:500;border:none;background:none;}
+  .nav-item.active{color:var(--accent);font-weight:700;}
+  .nav-item svg{width:20px;height:20px;}
+  main{flex:1;overflow-y:auto;padding:14px 14px 80px;}
+  .progress-box{background:var(--surface);border-radius:18px;padding:14px;margin-bottom:12px;border:1px solid var(--border);}
+  .prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .prog-label{font-size:12px;color:var(--sub);}
+  .prog-val{font-size:12px;font-weight:700;}
+  .prog-bar{height:7px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-bottom:10px;}
+  .prog-fill{height:100%;border-radius:99px;transition:width .5s ease;}
+  .card-wrap{perspective:1000px;margin-bottom:14px;transition:opacity .25s,transform .25s;}
+  .card-wrap.exit{opacity:0;transform:scale(.94) translateY(8px);}
+  .card-inner{position:relative;min-height:300px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.34,1.56,.64,1);}
+  .card-inner.flipped{transform:rotateY(180deg);}
+  .card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden;}
+  .card-front{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:14px;}
+  .card-back{transform:rotateY(180deg);background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;padding:24px;gap:12px;}
+  .emoji-box{font-size:48px;width:88px;height:88px;border-radius:20px;display:flex;align-items:center;justify-content:center;}
+  .word-text{font-size:30px;font-weight:800;letter-spacing:-1px;text-align:center;}
+  .tap-hint{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:4px;margin-top:6px;}
+  .meaning{font-size:24px;font-weight:800;letter-spacing:-.5px;color:var(--accent);}
+  .card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sub);}
+  .example-en{font-size:14px;line-height:1.6;font-style:italic;}
+  .example-tr{font-size:12px;line-height:1.6;color:var(--sub);}
+  .divider{height:1px;background:var(--border);}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:4px;}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .btn{border-radius:14px;padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;font-weight:700;transition:all .15s;outline:none;border:1.5px solid;}
+  .btn-green{color:var(--green);background:#10b98118;border-color:#10b98144;}
+  .btn-amber{color:var(--amber);background:#f59e0b18;border-color:#f59e0b44;}
+  .btn-red{color:var(--red);background:#ef444418;border-color:#ef444444;}
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px;}
+  .stat-num{font-size:26px;font-weight:800;letter-spacing:-1px;}
+  .stat-lbl{font-size:11px;color:var(--sub);}
+  .word-list{display:flex;flex-direction:column;gap:8px;}
+  .word-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:10px;}
+  .word-emoji{font-size:22px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+  .word-en{font-weight:700;font-size:14px;}
+  .word-tr{font-size:11px;color:var(--sub);margin-top:1px;}
+  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .empty{text-align:center;padding:48px 20px;color:var(--sub);}
+  .empty-icon{font-size:40px;margin-bottom:10px;}
+  .section-title{font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .setting-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;cursor:pointer;}
+  .setting-label{font-size:14px;font-weight:600;}
+  .toggle{width:42px;height:22px;border-radius:11px;position:relative;transition:background .2s;cursor:pointer;border:none;outline:none;}
+  .toggle-knob{position:absolute;top:2px;width:18px;height:18px;border-radius:9px;background:#fff;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  .goal-input{width:100%;padding:11px 14px;border-radius:11px;font-size:16px;font-weight:700;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);outline:none;box-sizing:border-box;}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal{background:var(--surface);border-radius:22px;padding:22px;width:100%;max-width:320px;border:1px solid var(--border);}
+  .modal-title{font-size:17px;font-weight:800;margin-bottom:14px;}
+  .modal-btns{display:flex;gap:10px;margin-top:14px;}
+  .modal-btn{flex:1;padding:11px;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+  .filter-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
+  .filter-btn{padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--sub);}
+  .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .goal-done{font-size:11px;color:var(--green);font-weight:700;background:#10b98118;border:1px solid #10b98133;border-radius:99px;padding:3px 8px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">WordIELTS</div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span id="goal-done-badge" class="goal-done" style="display:none">🎉 Hedef!</span>
+    <div class="streak">🔥 <span id="streak-count">0</span> gün</div>
+  </div>
+</header>
+
+<main id="main-content"></main>
+
+<nav>
+  <button class="nav-item active" onclick="switchTab('study')" id="tab-study">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    Çalış
+  </button>
+  <button class="nav-item" onclick="switchTab('learned')" id="tab-learned">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    Öğrendim
+  </button>
+  <button class="nav-item" onclick="switchTab('review')" id="tab-review">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    Tekrar
+  </button>
+  <button class="nav-item" onclick="switchTab('struggling')" id="tab-struggling">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    Zorlandım
+  </button>
+  <button class="nav-item" onclick="switchTab('stats')" id="tab-stats">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    İstatistik
+  </button>
+  <button class="nav-item" onclick="switchTab('settings')" id="tab-settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.33 13.53M4.93 19.07a10 10 0 0 1-1.33-13.53M19.07 19.07a10 10 0 0 1-13.53 1.33M4.93 4.93a10 10 0 0 1 13.53-1.33"/></svg>
+    Ayarlar
+  </button>
+</nav>
+
+<div class="modal-bg" id="modal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">Günlük Hedef</div>
+    <input class="goal-input" type="number" id="goal-input" min="1" max="200" value="10"/>
+    <div class="modal-btns">
+      <button class="modal-btn" style="background:var(--surface2);color:var(--text);" onclick="closeModal()">İptal</button>
+      <button class="modal-btn" style="background:var(--accent);color:#fff;" onclick="saveGoal()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── VERİ ───────────────────────────────────────────────────────────────────
+const CARDS = [
+  // KELİMELER
+  {id:1,type:"word",word:"Abundant",turkish:"Bol, çok miktarda",emoji:"🌿",color:"#10b981",sentences:[{en:"The region has abundant natural resources.",tr:"Bölge bol doğal kaynağa sahiptir."},{en:"Food was abundant at the festival.",tr:"Festivalde yiyecek boldu."},{en:"The garden is abundant with flowers in spring.",tr:"Bahçe ilkbaharda çiçeklerle dolu."}]},
+  {id:2,type:"word",word:"Achieve",turkish:"Başarmak, elde etmek",emoji:"🏆",color:"#f59e0b",sentences:[{en:"She worked hard to achieve her goals.",tr:"Hedeflerine ulaşmak için çok çalıştı."},{en:"It takes effort to achieve success.",tr:"Başarıya ulaşmak çaba gerektirir."},{en:"They achieved great results together.",tr:"Birlikte harika sonuçlar elde ettiler."}]},
+  {id:3,type:"word",word:"Adapt",turkish:"Uyum sağlamak",emoji:"🦋",color:"#8b5cf6",sentences:[{en:"Animals must adapt to survive.",tr:"Hayvanlar yaşamak için uyum sağlamalıdır."},{en:"She quickly adapted to the new environment.",tr:"Yeni ortama hızla uyum sağladı."},{en:"The company adapted its strategy.",tr:"Şirket stratejisini uyarladı."}]},
+  {id:4,type:"word",word:"Adequate",turkish:"Yeterli, uygun",emoji:"✅",color:"#06b6d4",sentences:[{en:"The salary was adequate for their needs.",tr:"Maaş ihtiyaçları için yeterliydi."},{en:"Make sure you get adequate sleep.",tr:"Yeterli uyku aldığınızdan emin olun."},{en:"The preparation was not adequate for the exam.",tr:"Hazırlık sınav için yeterli değildi."}]},
+  {id:5,type:"word",word:"Analyze",turkish:"Analiz etmek, incelemek",emoji:"🔬",color:"#3b82f6",sentences:[{en:"Scientists analyze data carefully.",tr:"Bilim insanları verileri dikkatli inceler."},{en:"We need to analyze the problem first.",tr:"Önce problemi analiz etmemiz gerekiyor."},{en:"She analyzed the results of the experiment.",tr:"Deneyin sonuçlarını analiz etti."}]},
+  {id:6,type:"word",word:"Anticipate",turkish:"Öngörmek, beklemek",emoji:"🔮",color:"#a855f7",sentences:[{en:"We anticipate a busy season ahead.",tr:"Önümüzdeki yoğun dönemi öngörüyoruz."},{en:"She anticipated his needs before he asked.",tr:"O sormadan önce ihtiyaçlarını öngördü."},{en:"Nobody anticipated such a result.",tr:"Kimse böyle bir sonuç beklemiyordu."}]},
+  {id:7,type:"word",word:"Appropriate",turkish:"Uygun, yerinde",emoji:"👍",color:"#10b981",sentences:[{en:"Please wear appropriate clothing.",tr:"Lütfen uygun kıyafet giyin."},{en:"That was not an appropriate response.",tr:"Bu uygun bir yanıt değildi."},{en:"Choose an appropriate time to call.",tr:"Aramak için uygun bir zaman seçin."}]},
+  {id:8,type:"word",word:"Assume",turkish:"Varsaymak, üstlenmek",emoji:"💭",color:"#f97316",sentences:[{en:"Don't assume you know the answer.",tr:"Cevabı bildiğini varsayma."},{en:"She assumed responsibility for the project.",tr:"Proje sorumluluğunu üstlendi."},{en:"We can assume the meeting is cancelled.",tr:"Toplantının iptal edildiğini varsayabiliriz."}]},
+  {id:9,type:"word",word:"Benefit",turkish:"Fayda, yarar sağlamak",emoji:"💡",color:"#eab308",sentences:[{en:"Exercise has many health benefits.",tr:"Egzersizin birçok sağlık faydası vardır."},{en:"Everyone can benefit from reading.",tr:"Herkes okumaktan fayda sağlayabilir."},{en:"The new law benefits small businesses.",tr:"Yeni yasa küçük işletmelere yarar sağlıyor."}]},
+  {id:10,type:"word",word:"Clarify",turkish:"Açıklamak, netleştirmek",emoji:"💬",color:"#06b6d4",sentences:[{en:"Could you clarify what you mean?",tr:"Ne demek istediğinizi açıklayabilir misiniz?"},{en:"She clarified her position on the issue.",tr:"Konuyla ilgili tutumunu netleştirdi."},{en:"The teacher clarified the instructions.",tr:"Öğretmen talimatları açıkladı."}]},
+  {id:11,type:"word",word:"Commitment",turkish:"Bağlılık, taahhüt",emoji:"🤝",color:"#10b981",sentences:[{en:"Success requires commitment and hard work.",tr:"Başarı bağlılık ve sıkı çalışma gerektirir."},{en:"She made a commitment to her studies.",tr:"Derslerine bağlılık gösterdi."},{en:"His commitment to the team is impressive.",tr:"Takıma olan bağlılığı etkileyici."}]},
+  {id:12,type:"word",word:"Consistent",turkish:"Tutarlı, sürekli",emoji:"🎯",color:"#f59e0b",sentences:[{en:"Be consistent in your daily practice.",tr:"Günlük pratiğinizde tutarlı olun."},{en:"Her performance is consistently high.",tr:"Performansı sürekli olarak yüksektir."},{en:"The results were consistent with expectations.",tr:"Sonuçlar beklentilerle tutarlıydı."}]},
+  {id:13,type:"word",word:"Contribute",turkish:"Katkıda bulunmak",emoji:"🌱",color:"#10b981",sentences:[{en:"Everyone can contribute to society.",tr:"Herkes topluma katkıda bulunabilir."},{en:"She contributed greatly to the project.",tr:"Projeye büyük katkıda bulundu."},{en:"Stress can contribute to health problems.",tr:"Stres sağlık sorunlarına katkıda bulunabilir."}]},
+  {id:14,type:"word",word:"Crucial",turkish:"Çok önemli, kritik",emoji:"⚡",color:"#ef4444",sentences:[{en:"Sleep is crucial for good health.",tr:"Uyku iyi sağlık için çok önemlidir."},{en:"This is a crucial moment in history.",tr:"Bu tarihin kritik bir anıdır."},{en:"Communication is crucial in relationships.",tr:"İlişkilerde iletişim çok önemlidir."}]},
+  {id:15,type:"word",word:"Decline",turkish:"Reddetmek, düşüş",emoji:"📉",color:"#ef4444",sentences:[{en:"She declined the job offer politely.",tr:"İş teklifini kibarca reddetti."},{en:"Sales have declined this year.",tr:"Satışlar bu yıl düştü."},{en:"The population is in decline.",tr:"Nüfus azalmaktadır."}]},
+  {id:16,type:"word",word:"Demonstrate",turkish:"Göstermek, kanıtlamak",emoji:"📋",color:"#3b82f6",sentences:[{en:"She demonstrated her skills clearly.",tr:"Becerilerini açıkça gösterdi."},{en:"The experiment demonstrates a key principle.",tr:"Deney temel bir prensibi kanıtlıyor."},{en:"He demonstrated how to use the machine.",tr:"Makineyi nasıl kullanacağını gösterdi."}]},
+  {id:17,type:"word",word:"Efficient",turkish:"Verimli, etkin",emoji:"⚙️",color:"#06b6d4",sentences:[{en:"Electric cars are more efficient.",tr:"Elektrikli arabalar daha verimlidir."},{en:"She found a more efficient way to work.",tr:"Çalışmanın daha verimli bir yolunu buldu."},{en:"The system is highly efficient.",tr:"Sistem son derece etkindir."}]},
+  {id:18,type:"word",word:"Eliminate",turkish:"Ortadan kaldırmak",emoji:"❌",color:"#ec4899",sentences:[{en:"We need to eliminate poverty.",tr:"Yoksulluğu ortadan kaldırmamız gerekiyor."},{en:"The treatment eliminated the infection.",tr:"Tedavi enfeksiyonu ortadan kaldırdı."},{en:"He eliminated all possible errors.",tr:"Tüm olası hataları ortadan kaldırdı."}]},
+  {id:19,type:"word",word:"Emphasize",turkish:"Vurgulamak",emoji:"📣",color:"#eab308",sentences:[{en:"She emphasized the importance of safety.",tr:"Güvenliğin önemini vurguladı."},{en:"The teacher emphasized key vocabulary.",tr:"Öğretmen temel kelimeleri vurguladı."},{en:"His speech emphasized team spirit.",tr:"Konuşması takım ruhunu vurguladı."}]},
+  {id:20,type:"word",word:"Enhance",turkish:"Geliştirmek, artırmak",emoji:"✨",color:"#a855f7",sentences:[{en:"Music can enhance your mood.",tr:"Müzik ruh halinizi geliştirebilir."},{en:"The update enhanced the app's performance.",tr:"Güncelleme uygulamanın performansını artırdı."},{en:"Exercise enhances both physical and mental health.",tr:"Egzersiz hem fiziksel hem de zihinsel sağlığı geliştirir."}]},
+  {id:21,type:"word",word:"Essential",turkish:"Gerekli, vazgeçilmez",emoji:"💧",color:"#3b82f6",sentences:[{en:"Water is essential for all living things.",tr:"Su tüm canlılar için vazgeçilmezdir."},{en:"Practice is essential to learn a language.",tr:"Pratik bir dil öğrenmek için gereklidir."},{en:"Trust is essential in any relationship.",tr:"Güven her ilişkide gereklidir."}]},
+  {id:22,type:"word",word:"Evaluate",turkish:"Değerlendirmek",emoji:"📝",color:"#f59e0b",sentences:[{en:"Teachers evaluate students regularly.",tr:"Öğretmenler öğrencileri düzenli olarak değerlendirir."},{en:"We need to evaluate the risks carefully.",tr:"Riskleri dikkatli değerlendirmemiz gerekiyor."},{en:"How do you evaluate your own performance?",tr:"Kendi performansınızı nasıl değerlendirirsiniz?"}]},
+  {id:23,type:"word",word:"Eventually",turkish:"Sonunda, er ya da geç",emoji:"⏳",color:"#8b5cf6",sentences:[{en:"She eventually found a solution.",tr:"Sonunda bir çözüm buldu."},{en:"Everyone eventually makes mistakes.",tr:"Herkes er ya da geç hata yapar."},{en:"He eventually accepted the truth.",tr:"Sonunda gerçeği kabul etti."}]},
+  {id:24,type:"word",word:"Flexible",turkish:"Esnek",emoji:"🤸",color:"#a855f7",sentences:[{en:"We need a flexible schedule.",tr:"Esnek bir programa ihtiyacımız var."},{en:"Yoga makes your body more flexible.",tr:"Yoga vücudunuzu daha esnek yapar."},{en:"She has a flexible approach to problems.",tr:"Sorunlara esnek bir yaklaşımı var."}]},
+  {id:25,type:"word",word:"Generate",turkish:"Üretmek, oluşturmak",emoji:"⚡",color:"#eab308",sentences:[{en:"Solar panels generate electricity.",tr:"Güneş panelleri elektrik üretir."},{en:"The business generates high profits.",tr:"İşletme yüksek kâr üretiyor."},{en:"Brainstorming generates creative ideas.",tr:"Beyin fırtınası yaratıcı fikirler oluşturur."}]},
+  {id:26,type:"word",word:"Identify",turkish:"Tanımlamak, belirlemek",emoji:"🔎",color:"#06b6d4",sentences:[{en:"Can you identify the problem?",tr:"Sorunu belirleyebilir misiniz?"},{en:"Police identified the suspect quickly.",tr:"Polis şüpheliyi hızla belirledi."},{en:"She identified a pattern in the data.",tr:"Verideki bir kalıbı belirledi."}]},
+  {id:27,type:"word",word:"Immediate",turkish:"Anlık, acil",emoji:"🚨",color:"#ef4444",sentences:[{en:"We need an immediate response.",tr:"Anlık bir yanıta ihtiyacımız var."},{en:"The fire required immediate attention.",tr:"Yangın acil ilgi gerektirdi."},{en:"She gave an immediate answer.",tr:"Anlık bir yanıt verdi."}]},
+  {id:28,type:"word",word:"Improve",turkish:"Geliştirmek, iyileştirmek",emoji:"📈",color:"#10b981",sentences:[{en:"You can improve your English with practice.",tr:"Pratik yaparak İngilizcenizi geliştirebilirsini
