@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>WordIELTS - Erca Hoca</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#0f0f13;--sf:#1a1a24;--sf2:#22222e;--bd:#2a2a38;--tx:#f0efff;--sub:#8888aa;--acc:#7c5cfc;--gr:#10b981;--am:#f59e0b;--rd:#ef4444;--nav:#13131a;}
+.light{--bg:#f8f7f4;--sf:#fff;--sf2:#f0eff8;--bd:#e5e4f0;--tx:#1a1a2e;--sub:#666688;--nav:#fff;}
+body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',sans-serif;min-height:100dvh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;}
+header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);background:var(--nav);position:sticky;top:0;z-index:10;}
+.logo{font-size:15px;font-weight:800;background:linear-gradient(135deg,#7c5cfc,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.streak{display:flex;align-items:center;gap:4px;background:#1f1500;border:1px solid #3d2800;border-radius:20px;padding:4px 10px;font-size:13px;font-weight:700;color:#f59e0b;}
+.light .streak{background:#fff7e6;border-color:#fbbf24;}
+nav{display:flex;background:var(--nav);border-top:1px solid var(--bd);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:10;}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 10px;cursor:pointer;gap:3px;color:var(--sub);font-size:9px;font-weight:500;border:none;background:none;}
+.ni.active{color:var(--acc);font-weight:700;}
+.ni svg{width:20px;height:20px;}
+main{flex:1;overflow-y:auto;padding:12px 12px 76px;}
+.pb{background:var(--sf);border-radius:16px;padding:12px;margin-bottom:10px;border:1px solid var(--bd);}
+.pr{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.pl{font-size:11px;color:var(--sub);}
+.pv{font-size:11px;font-weight:700;}
+.pbar{height:6px;border-radius:99px;background:var(--sf2);overflow:hidden;margin-bottom:8px;}
+.pfill{height:100%;border-radius:99px;transition:width .5s;}
+.cw{perspective:1200px;margin-bottom:12px;transition:opacity .22s,transform .22s;}
+.cw.exit{opacity:0;transform:scale(.94) translateY(8px);}
+.ci{position:relative;height:420px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.34,1.2,.64,1);}
+.ci.flip{transform:rotateY(180deg);}
+.cf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden;}
+/* ON YUZ */
+.front{display:flex;flex-direction:column;padding:14px;}
+.ftop{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.fimg{width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,0.2);}
+.fwb{flex:1;}
+.fw{font-size:20px;font-weight:800;color:#fff;line-height:1.2;}
+.ftag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-top:4px;}
+.fdiv{height:1px;background:rgba(255,255,255,0.15);margin-bottom:8px;}
+/* Es/Zit - on yuz */
+.sarow{display:flex;gap:8px;margin-bottom:8px;}
+.sabox{flex:1;border-radius:12px;padding:8px 10px;}
+.syn{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);}
+.ant{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);}
+.salbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;}
+.slbl{color:#10b981;}
+.albl{color:#ef4444;}
+.saw{font-size:13px;font-weight:800;color:#fff;}
+.saex{font-size:10px;color:rgba(255,255,255,0.6);font-style:italic;margin-top:2px;line-height:1.4;}
+.flbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.45);margin-bottom:4px;}
+.fs{font-size:12px;line-height:1.6;color:rgba(255,255,255,0.88);font-style:italic;margin-bottom:3px;}
+.hint{font-size:10px;color:rgba(255,255,255,0.35);margin-top:auto;padding-top:5px;text-align:center;}
+/* ARKA YUZ */
+.back{transform:rotateY(180deg);background:var(--sf);border:1px solid var(--bd);display:flex;flex-direction:column;padding:16px;overflow-y:auto;gap:0;height:100%;}
+.bm{font-size:22px;font-weight:800;color:var(--acc);margin-bottom:10px;}
+.bl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sub);margin-bottom:4px;}
+.be{font-size:12px;font-style:italic;color:var(--tx);line-height:1.6;}
+.bt{font-size:11px;color:var(--sub);margin-bottom:7px;line-height:1.5;}
+.bdv{height:1px;background:var(--bd);margin:8px 0;}
+/* Butonlar */
+.brow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.btn{border-radius:14px;padding:11px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:700;border:1.5px solid;outline:none;}
+.bg{color:#10b981;background:#10b98118;border-color:#10b98144;}
+.ba{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b44;}
+.br{color:#ef4444;background:#ef444418;border-color:#ef444444;}
+/* Liste */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:14px;}
+.sn{font-size:26px;font-weight:800;letter-spacing:-1px;}
+.sl{font-size:11px;color:var(--sub);}
+.wl{display:flex;flex-direction:column;gap:7px;}
+.wi{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:9px 12px;display:flex;align-items:center;gap:9px;}
+.wimg{width:36px;height:36px;border-radius:8px;object-fit:cover;}
+.wen{font-weight:700;font-size:13px;}
+.wtr{font-size:10px;color:var(--sub);margin-top:1px;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.empty{text-align:center;padding:40px 20px;color:var(--sub);}
+.stit{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.sr{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;}
+.tgl{width:42px;height:22px;border-radius:11px;position:relative;transition:background .2s;cursor:pointer;border:none;outline:none;}
+.tk{position:absolute;top:2px;width:18px;height:18px;border-radius:9px;background:#fff;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.gi{width:100%;padding:10px 12px;border-radius:10px;font-size:16px;font-weight:700;background:var(--sf2);border:1.5px solid var(--bd);color:var(--tx);outline:none;}
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.md{background:var(--sf);border-radius:20px;padding:20px;width:100%;max-width:300px;border:1px solid var(--bd);}
+.mt{font-size:16px;font-weight:800;margin-bottom:12px;}
+.mbs{display:flex;gap:10px;margin-top:12px;}
+.mb2{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+.fr{display:flex;gap:7px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px;}
+.fb{padding:5px 12px;border-radius:99px;font-size:10px;font-weight:700;white-space:nowrap;cursor:pointer;border:1.5px solid var(--bd);background:var(--sf);color:var(--sub);}
+.fb.act{background:var(--acc);border-color:var(--acc);color:#fff;}
+.gdb{font-size:10px;color:var(--gr);font-weight:700;background:#10b98118;border:1px solid #10b98133;border-radius:99px;padding:3px 8px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">WordIELTS - Erca Hoca</div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span id="gdb" class="gdb" style="display:none">Hedef!</span>
+    <div class="streak">🔥 <span id="sc">0</span></div>
+  </div>
+</header>
+<main id="mc"></main>
+<nav>
+  <button class="ni active" onclick="st('study')" id="t-study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Calis</button>
+  <button class="ni" onclick="st('learned')" id="t-learned"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Ogrendim</button>
+  <button class="ni" onclick="st('review')" id="t-review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Tekrar</button>
+  <button class="ni" onclick="st('struggling')" id="t-struggling"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Zor</button>
+  <button class="ni" onclick="st('stats')" id="t-stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Istat.</button>
+  <button class="ni" onclick="st('settings')" id="t-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.33 13.53M4.93 19.07a10 10 0 0 1-1.33-13.53M19.07 19.07a10 10 0 0 1-13.53 1.33M4.93 4.93a10 10 0 0 1 13.53-1.33"/></svg>Ayarlar</button>
+</nav>
+<div class="mb" id="modal" style="display:none">
+  <div class="md">
+    <div class="mt">Gunluk Hedef</div>
+    <input class="gi" type="number" id="gi" min="1" max="200" value="10"/>
+    <div class="mbs">
+      <button class="mb2" style="background:var(--sf2);color:var(--tx);" onclick="closeM()">Iptal</button>
+      <button class="mb2" style="background:var(--acc);color:#fff;" onclick="saveG()">Kaydet</button>
+    </div>
+  </div>
+</div>
+<script>
+const IMG_MAP = {
+  1: {f:"IMG-20260531-WA0003.jpg",c:1,r:0,tc:10,tr:10},
+  2: {f:"IMG-20260531-WA0003.jpg",c:2,r:0,tc:10,tr:10},
+  3: {f:"IMG-20260531-WA0003.jpg",c:3,r:0,tc:10,tr:10},
+  4: {f:"IMG-20260531-WA0003.jpg",c:4,r:0,tc:10,tr:10},
+  5: {f:"IMG-20260531-WA0003.jpg",c:6,r:0,tc:10,tr:10},
+  6: {f:"IMG-20260531-WA0003.jpg",c:7,r:0,tc:10,tr:10},
+  7: {f:"IMG-20260531-WA0003.jpg",c:8,r:0,tc:10,tr:10},
+  8: {f:"IMG-20260531-WA0003.jpg",c:9,r:0,tc:10,tr:10},
+  9: {f:"IMG-20260531-WA0003.jpg",c:1,r:1,tc:10,tr:10},
+  10: {f:"IMG-20260531-WA0003.jpg",c:0,r:1,tc:10,tr:10},
+  11: {f:"IMG-20260531-WA0003.jpg",c:2,r:1,tc:10,tr:10},
+  12: {f:"IMG-20260531-WA0003.jpg",c:6,r:1,tc:10,tr:10},
+  13: {f:"IMG-20260531-WA0003.jpg",c:8,r:1,tc:10,tr:10},
+  14: {f:"IMG-20260531-WA0003.jpg",c:0,r:2,tc:10,tr:10},
+  15: {f:"IMG-20260531-WA0003.jpg",c:1,r:2,tc:10,tr:10},
+  16: {f:"IMG-20260531-WA0003.jpg",c:2,r:2,tc:10,tr:10},
+  17: {f:"IMG-20260531-WA0003.jpg",c:3,r:2,tc:10,tr:10},
+  18: {f:"IMG-20260531-WA0003.jpg",c:4,r:2,tc:10,tr:10},
+  19: {f:"IMG-20260531-WA0003.jpg",c:5,r:2,tc:10,tr:10},
+  20: {f:"IMG-20260531-WA0003.jpg",c:6,r:2,tc:10,tr:10},
+  21: {f:"IMG-20260531-WA0003.jpg",c:7,r:2,tc:10,tr:10},
+  22: {f:"IMG-20260531-WA0003.jpg",c:9,r:2,tc:10,tr:10},
+  23: {f:"IMG-20260531-WA0003.jpg",c:0,r:3,tc:10,tr:10},
+  24: {f:"IMG-20260531-WA0003.jpg",c:1,r:3,tc:10,tr:10},
+  25: {f:"IMG-20260531-WA0003.jpg",c:2,r:3,tc:10,tr:10},
+  26: {f:"IMG-20260531-WA0003.jpg",c:3,r:3,tc:10,tr:10},
+  27: {f:"IMG-20260531-WA0003.jpg",c:5,r:3,tc:10,tr:10},
+  28: {f:"IMG-20260531-WA0006.jpg",c:3,r:5,tc:10,tr:8},
+  29: {f:"IMG-20260531-WA0004.jpg",c:6,r:6,tc:10,tr:8},
+  30: {f:"IMG-20260531-WA0006.jpg",c:8,r:4,tc:10,tr:8},
+  31: {f:"IMG-20260531-WA0003.jpg",c:0,r:5,tc:10,tr:10},
+  32: {f:"IMG-20260531-WA0003.jpg",c:1,r:5,tc:10,tr:10},
+  33: {f:"IMG-20260531-WA0003.jpg",c:4,r:5,tc:10,tr:10},
+  34: {f:"IMG-20260531-WA0003.jpg",c:8,r:3,tc:10,tr:10},
+  35: {f:"IMG-20260531-WA0003.jpg",c:6,r:3,tc:10,tr:10},
+  36: {f:"IMG-20260531-WA0006.jpg",c:4,r:6,tc:10,tr:8},
+  37: {f:"IMG-20260531-WA0003.jpg",c:2,r:7,tc:10,tr:10},
+  38: {f:"IMG-20260531-WA0003.jpg",c:5,r:7,tc:10,tr:10},
+  39: {f:"IMG-20260531-WA0003.jpg",c:3,r:8,tc:10,tr:10},
+  40: {f:"IMG-20260531-WA0003.jpg",c:5,r:8,tc:10,tr:10},
+  41: {f:"IMG-20260531-WA0003.jpg",c:6,r:8,tc:10,tr:10},
+  42: {f:"IMG-20260531-WA0003.jpg",c:9,r:8,tc:10,tr:10},
+  43: {f:"IMG-20260531-WA0003.jpg",c:1,r:4,tc:10,tr:10},
+  44: {f:"IMG-20260531-WA0004.jpg",c:9,r:0,tc:10,tr:8},
+  45: {f:"IMG-20260531-WA0004.jpg",c:3,r:1,tc:10,tr:8},
+  46: {f:"IMG-20260531-WA0004.jpg",c:0,r:2,tc:10,tr:8},
+  47: {f:"IMG-20260531-WA0006.jpg",c:5,r:0,tc:10,tr:8},
+  48: {f:"IMG-20260531-WA0004.jpg",c:6,r:2,tc:10,tr:8},
+  49: {f:"IMG-20260531-WA0005.jpg",c:2,r:1,tc:10,tr:8},
+  50: {f:"IMG-20260531-WA0004.jpg",c:1,r:5,tc:10,tr:8},
+  51: {f:"IMG-20260531-WA0005.jpg",c:5,r:5,tc:10,tr:8},
+  52: {f:"IMG-20260531-WA0005.jpg",c:3,r:5,tc:10,tr:8},
+  53: {f:"IMG-20260531-WA0005.jpg",c:0,r:5,tc:10,tr:8},
+  54: {f:"IMG-20260531-WA0005.jpg",c:8,r:4,tc:10,tr:8},
+  55: {f:"IMG-20260531-WA0008.jpg",c:1,r:1,tc:10,tr:8},
+  56: {f:"IMG-20260531-WA0008.jpg",c:0,r:3,tc:10,tr:8},
+  57: {f:"IMG-20260531-WA0008.jpg",c:2,r:3,tc:10,tr:8},
+  58: {f:"IMG-20260531-WA0008.jpg",c:3,r:3,tc:10,tr:8},
+  59: {f:"IMG-20260531-WA0008.jpg",c:8,r:2,tc:10,tr:8},
+  60: {f:"IMG-20260531-WA0003.jpg",c:9,r:6,tc:10,tr:10},
+  61: {f:"IMG-20260531-WA0003.jpg",c:7,r:1,tc:10,tr:10},
+  62: {f:"IMG-20260531-WA0003.jpg",c:9,r:1,tc:10,tr:10},
+  63: {f:"IMG-20260531-WA0003.jpg",c:1,r:8,tc:10,tr:10},
+  64: {f:"IMG-20260531-WA0003.jpg",c:2,r:8,tc:10,tr:10},
+  65: {f:"IMG-20260531-WA0003.jpg",c:0,r:8,tc:10,tr:10},
+  66: {f:"IMG-20260531-WA0005.jpg",c:8,r:0,tc:10,tr:8},
+  67: {f:"IMG-20260531-WA0005.jpg",c:9,r:0,tc:10,tr:8},
+  68: {f:"IMG-20260531-WA0005.jpg",c:7,r:0,tc:10,tr:8},
+  69: {f:"IMG-20260531-WA0005.jpg",c:0,r:1,tc:10,tr:8},
+  70: {f:"IMG-20260531-WA0004.jpg",c:6,r:3,tc:10,tr:8},
+  71: {f:"IMG-20260531-WA0004.jpg",c:3,r:3,tc:10,tr:8},
+  72: {f:"IMG-20260531-WA0005.jpg",c:4,r:9,tc:10,tr:8},
+  73: {f:"IMG-20260531-WA0005.jpg",c:0,r:9,tc:10,tr:8},
+  74: {f:"IMG-20260531-WA0005.jpg",c:0,r:0,tc:10,tr:8},
+  75: {f:"IMG-20260531-WA0005.jpg",c:7,r:7,tc:10,tr:8},
+  76: {f:"IMG-20260531-WA0005.jpg",c:8,r:7,tc:10,tr:8},
+  77: {f:"IMG-20260531-WA0004.jpg",c:8,r:2,tc:10,tr:8},
+  78: {f:"IMG-20260531-WA0004.jpg",c:7,r:2,tc:10,tr:8},
+  79: {f:"IMG-20260531-WA0004.jpg",c:9,r:2,tc:10,tr:8},
+  80: {f:"IMG-20260531-WA0005.jpg",c:8,r:9,tc:10,tr:8},
+  81: {f:"IMG-20260531-WA0005.jpg",c:0,r:7,tc:10,tr:8},
+  82: {f:"IMG-20260531-WA0005.jpg",c:1,r:7,tc:10,tr:8},
+  83: {f:"IMG-20260531-WA0005.jpg",c:2,r:7,tc:10,tr:8},
+  84: {f:"IMG-20260531-WA0005.jpg",c:9,r:8,tc:10,tr:8},
+  85: {f:"IMG-20260531-WA0005.jpg",c:2,r:6,tc:10,tr:8},
+  86: {f:"IMG-20260531-WA0005.jpg",c:3,r:6,tc:10,tr:8},
+  87: {f:"IMG-20260531-WA0005.jpg",c:1,r:6,tc:10,tr:8},
+  88: {f:"IMG-20260531-WA0005.jpg",c:0,r:6,tc:10,tr:8},
+  89: {f:"IMG-20260531-WA0005.jpg",c:8,r:5,tc:10,tr:8},
+  90: {f:"IMG-20260531-WA0005.jpg",c:5,r:4,tc:10,tr:8},
+  91: {f:"IMG-20260531-WA0004.jpg",c:1,r:0,tc:10,tr:8},
+  92: {f:"IMG-20260531-WA0004.jpg",c:2,r:0,tc:10,tr:8},
+  93: {f:"IMG-20260531-WA0004.jpg",c:0,r:0,tc:10,tr:8},
+  94: {f:"IMG-20260531-WA0006.jpg",c:1,r:1,tc:10,tr:8},
+  95: {f:"IMG-20260531-WA0005.jpg",c:0,r:2,tc:10,tr:8},
+  96: {f:"IMG-20260531-WA0006.jpg",c:1,r:2,tc:10,tr:8},
+  97: {f:"IMG-20260531-WA0003.jpg",c:5,r:6,tc:10,tr:10},
+  98: {f:"IMG-20260531-WA0003.jpg",c:8,r:6,tc:10,tr:10},
+  99: {f:"IMG-20260531-WA0003.jpg",c:4,r:6,tc:10,tr:10},
+  100: {f:"IMG-20260531-WA0003.jpg",c:7,r:8,tc:10,tr:10},
+  101: {f:"IMG-20260531-WA0005.jpg",c:1,r:3,tc:10,tr:8},
+  102: {f:"IMG-20260531-WA0005.jpg",c:2,r:3,tc:10,tr:8},
+  103: {f:"IMG-20260531-WA0005.jpg",c:0,r:3,tc:10,tr:8},
+  104: {f:"IMG-20260531-WA0006.jpg",c:0,r:0,tc:10,tr:8},
+  105: {f:"IMG-20260531-WA0005.jpg",c:1,r:1,tc:10,tr:8},
+  106: {f:"IMG-20260531-WA0005.jpg",c:0,r:6,tc:10,tr:8},
+  107: {f:"IMG-20260531-WA0005.jpg",c:8,r:4,tc:10,tr:8},
+  108: {f:"IMG-20260531-WA0006.jpg",c:1,r:2,tc:10,tr:8},
+  109: {f:"IMG-20260531-WA0004.jpg",c:8,r:0,tc:10,tr:8},
+  110: {f:"IMG-20260531-WA0005.jpg",c:6,r:2,tc:10,tr:8},
+  111: {f:"IMG-20260531-WA0005.jpg",c:7,r:2,tc:10,tr:8},
+  112: {f:"IMG-20260531-WA0005.jpg",c:8,r:1,tc:10,tr:8},
+  113: {f:"IMG-20260531-WA0004.jpg",c:3,r:8,tc:10,tr:8},
+  114: {f:"IMG-20260531-WA0005.jpg",c:6,r:4,tc:10,tr:8},
+  115: {f:"IMG-20260531-WA0004.jpg",c:4,r:1,tc:10,tr:8},
+  116: {f:"IMG-20260531-WA0006.jpg",c:4,r:6,tc:10,tr:8},
+  117: {f:"IMG-20260531-WA0006.jpg",c:6,r:0,tc:10,tr:8},
+  118: {f:"IMG-20260531-WA0011.jpg",c:9,r:6,tc:10,tr:8},
+  119: {f:"IMG-20260531-WA0005.jpg",c:8,r:3,tc:10,tr:8},
+  120: {f:"IMG-20260531-WA0005.jpg",c:9,r:3,tc:10,tr:8},
+  121: {f:"IMG-20260531-WA0005.jpg",c:6,r:3,tc:10,tr:8},
+  122: {f:"IMG-20260531-WA0008.jpg",c:4,r:1,tc:10,tr:8},
+  123: {f:"IMG-20260531-WA0005.jpg",c:4,r:4,tc:10,tr:8},
+  124: {f:"IMG-20260531-WA0005.jpg",c:5,r:4,tc:10,tr:8},
+  125: {f:"IMG-20260531-WA0005.jpg",c:7,r:4,tc:10,tr:8},
+  126: {f:"IMG-20260531-WA0005.jpg",c:8,r:4,tc:10,tr:8},
+  127: {f:"IMG-20260531-WA0005.jpg",c:1,r:2,tc:10,tr:8},
+  128: {f:"IMG-20260531-WA0005.jpg",c:2,r:4,tc:10,tr:8},
+  129: {f:"IMG-20260531-WA0005.jpg",c:7,r:2,tc:10,tr:8},
+  130: {f:"IMG-20260531-WA0005.jpg",c:8,r:2,tc:10,tr:8},
+};
+
+
+// Canvas ile fotografi kes
+const _cache = {};
+function getImg(cardId) {
+  if (_cache[cardId]) return _cache[cardId];
+  const m = IMG_MAP[cardId];
+  if (!m) return null;
+  const img = new Image();
+  img.src = m.f;
+  const canvas = document.createElement('canvas');
+  canvas.width = 90; canvas.height = 90;
+  const ctx = canvas.getContext('2d');
+  img.onload = () => {
+    const cw = img.naturalWidth / m.tc;
+    const ch = img.naturalHeight / m.tr;
+    const offset = 45;  // ikon başlangıç offseti
+    const srcH = Math.min(ch - offset, img.naturalHeight - (m.r * ch + offset));
+    ctx.drawImage(img, m.c * cw, m.r * ch + offset, cw, srcH, 0, 0, 90, 90);
+    _cache[cardId] = canvas.toDataURL('image/webp', 0.7);
+    const el = document.querySelector(`img[data-cid="${cardId}"]`);
+    if (el) el.src = _cache[cardId];
+  };
+  return null;
+}
+
+// Fotograf on yukle
+function preload() {
+  const loaded = {};
+  Object.values(IMG_MAP).forEach(m => {
+    if (!loaded[m.f]) {
+      loaded[m.f] = true;
+      const img = new Image();
+      img.src = m.f;
+    }
+  });
+}
+
+const CARDS = [
+{id:1,tp:"word",w:"Wish",tr:"Dilemek/Dilek",c:"#a855f7",e:"I wish I could come with you tomorrow.",t:"Keske yarin seninle gelebilsem.",e2:"Wish me good luck!",t2:"Bana iyi sanslar dile!",sw:"Hope",se:"I hope things get better soon.",aw:"Despair",ae:"She felt nothing but despair."},
+{id:2,tp:"word",w:"Apply",tr:"Basvurmak/Uygulamak",c:"#3b82f6",e:"I applied for a job at a textile company.",t:"Tekstil sirketinde bir ise basvurdum.",e2:"The law does not apply to children under 12.",t2:"Bu yasa 12 yasin altindakilere gecerli degil.",sw:"Submit",se:"Please submit your application by Friday.",aw:"Withdraw",ae:"He withdrew his application at the last minute."},
+{id:3,tp:"word",w:"Request",tr:"Rica etmek/Talep",c:"#06b6d4",e:"The boss refused my request to leave early.",t:"Patron erken cikma ricami reddetti.",e2:"You can get the report on request.",t2:"Raporu talep uzerine alabilirsiniz.",sw:"Demand",se:"She made a formal demand for a refund.",aw:"Offer",ae:"He offered help without being asked."},
+{id:4,tp:"word",w:"Feel",tr:"Hissetmek/Dokunmak",c:"#8b5cf6",e:"I feel like I am being watched.",t:"Gozetleniyormussum gibi hissediyorum.",e2:"How do you feel about this decision?",t2:"Bu karar hakkinda ne hissediyorsun?",sw:"Sense",se:"She sensed something was wrong immediately.",aw:"Ignore",ae:"He ignored the warning signs completely."},
+{id:5,tp:"word",w:"Complain",tr:"Sikayet etmek",c:"#ef4444",e:"She complained about the noise all night.",t:"Butun gece gurultudan sikayet etti.",e2:"He always complains but never does anything.",t2:"Her zaman sikayet eder ama hicbir sey yapmaz.",sw:"Grumble",se:"He grumbled about the cold weather all day.",aw:"Praise",ae:"She praised the team for their hard work."},
+{id:6,tp:"word",w:"Worth",tr:"Deger/Degmek",c:"#f59e0b",e:"Is it worth applying for this position?",t:"Bu pozisyona basvurmaya deger mi?",e2:"The experience was worth every penny spent.",t2:"Deneyim harcanan her kurusa degdi.",sw:"Value",se:"The value of education cannot be measured.",aw:"Worthless",ae:"The old coins turned out to be worthless."},
+{id:7,tp:"word",w:"Belong",tr:"Ait olmak",c:"#10b981",e:"This book belongs to me not you.",t:"Bu kitap bana ait sana degil.",e2:"She finally feels like she belongs here.",t2:"Sonunda buraya ait oldugunu hissediyor.",sw:"Own",se:"He owns a small house by the sea.",aw:"Alienate",ae:"His behaviour alienated everyone around him."},
+{id:8,tp:"word",w:"Grind",tr:"Calisip didinmek",c:"#6366f1",e:"He grinds every day to achieve his goals.",t:"Hedeflerine ulasmak icin her gun didiniyor.",e2:"Stop complaining and start grinding.",t2:"Sikayet etmeyi birak ve calismaya basla.",sw:"Toil",se:"They toiled for hours without a break.",aw:"Rest",ae:"You need to rest before the big day."},
+{id:9,tp:"word",w:"Care",tr:"Umursamak/Ozen gostermek",c:"#ec4899",e:"I do not care what other people think of me.",t:"Baskalarin ne dusundugunu umursamiyorum.",e2:"She cares deeply for her elderly parents.",t2:"Yasli anne babasina derin bir ozenle bakiyor.",sw:"Concern",se:"Her concern for others is truly admirable.",aw:"Neglect",ae:"He neglected his responsibilities completely."},
+{id:10,tp:"word",w:"Tear",tr:"Yirtmak/Gozyasi",c:"#3b82f6",e:"She tore the letter into tiny pieces.",t:"Mektubu kucuk parcalara yirtti.",e2:"Tears rolled slowly down her cheeks.",t2:"Gozyaslari yanaklarindan yavas akti.",sw:"Rip",se:"He ripped the page out of the notebook.",aw:"Mend",ae:"She mended the torn jacket carefully."},
+{id:11,tp:"word",w:"Confuse",tr:"Karistirmak",c:"#a855f7",e:"Do not confuse me with my twin brother.",t:"Beni ikiz kardesimle karistirmayin.",e2:"The instructions confused absolutely everyone.",t2:"Talimatlar herkesi sasirtti.",sw:"Perplex",se:"The strange question perplexed the students.",aw:"Clarify",ae:"She clarified the misunderstanding right away."},
+{id:12,tp:"word",w:"Loose",tr:"Gevshek/Bol",c:"#f97316",e:"These jeans are far too loose for me.",t:"Bu kot bana cok bol.",e2:"He loosened his tie after the long meeting.",t2:"Uzun toplantinin ardindan kravatini gevsetti.",sw:"Slack",se:"The rope was too slack to hold anything.",aw:"Tight",ae:"The lid was too tight to open easily."},
+{id:13,tp:"word",w:"Adjust",tr:"Ayarlamak/Uyum saglamak",c:"#14b8a6",e:"You really need to adjust your attitude.",t:"Tutumunu gercekten ayarlaman gerekiyor.",e2:"It takes time to adjust to a new country.",t2:"Yeni bir ulkeye uyum saglamak zaman alir.",sw:"Adapt",se:"She adapted quickly to the new environment.",aw:"Resist",ae:"He resisted every attempt to change him."},
+{id:14,tp:"word",w:"Concern",tr:"Ilgilendirmek/Endishe",c:"#ef4444",e:"This matter concerns me deeply.",t:"Bu durum beni derinden endishelendiriyor.",e2:"It does not concern you at all.",t2:"Seni hic alakadar etmez.",sw:"Worry",se:"The news worried everyone in the office.",aw:"Reassure",ae:"The doctor reassured her that all was fine."},
+{id:15,tp:"word",w:"Interrupt",tr:"Sozunu kesmek",c:"#f59e0b",e:"Please do not interrupt me while I am speaking.",t:"Konusurken lutfen sozumu kesme.",e2:"The power cut interrupted the whole meeting.",t2:"Elektrik kesintisi toplantinin tamamini boldu.",sw:"Disrupt",se:"The protestors disrupted the entire event.",aw:"Continue",ae:"Please continue. I want to hear more."},
+{id:16,tp:"word",w:"Attend",tr:"Katilmak/Devam etmek",c:"#3b82f6",e:"Will you attend the conference next week?",t:"Gelecek haftaki konferansa katilacak misin?",e2:"She attends English classes every day.",t2:"Her gun Ingilizce derslerine devam ediyor.",sw:"Participate",se:"Everyone participated in the workshop actively.",aw:"Absent",ae:"He was absent from school three days in a row."},
+{id:17,tp:"word",w:"Miss",tr:"Ozlemek/Kacirmak",c:"#8b5cf6",e:"I miss you so much it hurts.",t:"Seni o kadar cok ozluyorum ki aci veriyor.",e2:"Do not miss this incredible opportunity.",t2:"Bu inanilmaz firsati kacirma.",sw:"Long for",se:"She longed for the days of her childhood.",aw:"Encounter",ae:"He encountered her unexpectedly at the station."},
+{id:18,tp:"word",w:"Fake",tr:"Sahte/Yapay",c:"#6366f1",e:"That smile looks completely fake to me.",t:"O gulumseye bana tamamen yapay gorunuyor.",e2:"He was caught selling fake designer goods.",t2:"Sahte marka urunler satarken yakalandi.",sw:"Counterfeit",se:"The counterfeit notes were very convincing.",aw:"Genuine",ae:"This is a genuine piece of art not a copy."},
+{id:19,tp:"word",w:"Fit",tr:"Uymak/Saglikli",c:"#10b981",e:"Does this shirt fit you well?",t:"Bu gomlek sana iyi uyuyor mu?",e2:"She keeps fit by running every morning.",t2:"Her sabah kosarak formunu koruyor.",sw:"Suit",se:"This job really suits your personality.",aw:"Unfit",ae:"He was declared unfit for military service."},
+{id:20,tp:"word",w:"Drop",tr:"Dusurmek/Azalmak",c:"#06b6d4",e:"Do not drop the ball at the last minute.",t:"Son dakikada topu dusurme.",e2:"The temperature dropped below zero overnight.",t2:"Sicaklik gece boyunca sifirin altina dustu.",sw:"Fall",se:"Sales figures fell sharply last quarter.",aw:"Rise",ae:"Prices rose steadily throughout the year."},
+{id:21,tp:"word",w:"Commit",tr:"Taahhut etmek/Adamak",c:"#a855f7",e:"He committed to finishing the project on time.",t:"Projeyi zamaninda bitirmeye taahhut etti.",e2:"She committed a very serious mistake.",t2:"Cok ciddi bir hata yapti.",sw:"Dedicate",se:"He dedicated himself fully to the cause.",aw:"Abandon",ae:"She abandoned the project halfway through."},
+{id:22,tp:"word",w:"Exceed",tr:"Asmak/Gecmek",c:"#ef4444",e:"You have exceeded the speed limit.",t:"Hiz sinirini astiniz.",e2:"The results exceeded all our expectations.",t2:"Sonuclar tum beklentilerimizi asti.",sw:"Surpass",se:"She surpassed all previous records easily.",aw:"Fall short",ae:"The team fell short of its targets."},
+{id:23,tp:"word",w:"Suffer",tr:"Aci cekmek/Zarar gormek",c:"#ef4444",e:"She suffered from anxiety for many years.",t:"Yillarca kaygi bozuklugunda muzdarip oldu.",e2:"The local economy suffered greatly during the crisis.",t2:"Yerel ekonomi kriz doneminde buyuk zarar gordu.",sw:"Endure",se:"He endured years of hardship without complaint.",aw:"Thrive",ae:"The business thrived after the restructuring."},
+{id:24,tp:"word",w:"Deal",tr:"Basa cikmak/Anlasma",c:"#14b8a6",e:"How do you deal with stress effectively?",t:"Stresle etkili bicimde nasil basa cikiyorsun?",e2:"We finally made a deal with the supplier.",t2:"Tedarikciyle nihayet bir anlasma yaptik.",sw:"Handle",se:"She handled the difficult situation very calmly.",aw:"Avoid",ae:"He avoided the problem instead of solving it."},
+{id:25,tp:"word",w:"Fix",tr:"Duzeltmek/Tamir etmek",c:"#f97316",e:"Can you fix this broken chair for me?",t:"Bu kirik sandalyeyi benim icin tamir edebilir misin?",e2:"Let me fix you a nice cup of tea.",t2:"Sana guzel bir cay yapayim.",sw:"Repair",se:"The mechanic repaired the car in one hour.",aw:"Break",ae:"He accidentally broke the screen."},
+{id:26,tp:"word",w:"Bother",tr:"Rahatsiz etmek",c:"#f59e0b",e:"Do not bother me while I am working.",t:"Calisiirken beni rahatsiz etme.",e2:"I do not want to bother you with my problems.",t2:"Sorunlarimla basini agritamak istemem.",sw:"Disturb",se:"Please do not disturb me during the exam.",aw:"Soothe",ae:"The music soothed her nerves completely."},
+{id:27,tp:"word",w:"Settle",tr:"Yerlesmek/Cozmek",c:"#10b981",e:"They settled in Canada after they retired.",t:"Emeklilikten sonra Kanadaya yerlestiler.",e2:"Let us settle this problem once and for all.",t2:"Bu sorunu bir kez ve herkes icin cozelim.",sw:"Resolve",se:"They resolved the dispute without going to court.",aw:"Unsettle",ae:"The unexpected news unsettled everyone."},
+{id:28,tp:"word",w:"Grieve",tr:"Yas tutmak/Uzulmek",c:"#8b5cf6",e:"She is still grieving over the loss of her father.",t:"Babasinin kaybi icin hala yas tutuyor.",e2:"Give yourself time and space to grieve.",t2:"Yas tutmak icin kendine zaman ve alan ver.",sw:"Mourn",se:"The whole nation mourned the heros death.",aw:"Rejoice",ae:"They rejoiced at the wonderful news."},
+{id:29,tp:"word",w:"Relieve",tr:"Rahatlatmak/Hafifletmek",c:"#06b6d4",e:"This medicine will relieve your pain.",t:"Bu ilac agrinizi hafifletecek.",e2:"Exercise relieves stress effectively.",t2:"Egzersiz stresi etkili biciimde rahatlatir.",sw:"Ease",se:"A warm bath eased the muscle tension.",aw:"Aggravate",ae:"Ignoring the problem only aggravated things."},
+{id:30,tp:"word",w:"Restrict",tr:"Kisitlamak/Sinirlamak",c:"#ef4444",e:"The doctor restricted his diet completely.",t:"Doktor diyetini tamamen kisitladi.",e2:"Access to the building was restricted.",t2:"Binaya erisim kisitlandi.",sw:"Limit",se:"They limited the number of tickets available.",aw:"Allow",ae:"They allowed everyone free access to the park."},
+{id:31,tp:"word",w:"Deprive",tr:"Yoksun birakmak",c:"#a855f7",e:"Sleep deprivation seriously affects your performance.",t:"Uyku yoksunlugu performansini ciddi sekilde etkiler.",e2:"Children should not be deprived of education.",t2:"Cocuklar egitimden yoksun birakilmamali.",sw:"Deny",se:"She was denied access to the building.",aw:"Provide",ae:"The government provided food for all refugees."},
+{id:32,tp:"word",w:"Disappoint",tr:"Hayal kirikligi",c:"#6366f1",e:"I really do not want to disappoint you.",t:"Seni gercekten hayal kirikl\u0131\u011f\u0131na ugratmak istemiyorum.",e2:"The results disappointed absolutely everyone.",t2:"Sonuclar herkesi hayal kirikl\u0131\u011f\u0131na ugratti.",sw:"Let down",se:"He let his team down at the worst moment.",aw:"Impress",ae:"She impressed everyone with her brilliant speech."},
+{id:33,tp:"word",w:"Distract",tr:"Dikkatini dagitmak",c:"#f97316",e:"Stop distracting me. I need to focus now.",t:"Dikkatimi dagitmayi birak. Simdi odaklanmam lazim.",e2:"Social media distracts students from their studies.",t2:"Sosyal medya ogrencilerin dikkatini calishmadan dagitir.",sw:"Divert",se:"The noise diverted his attention from work.",aw:"Focus",ae:"She focused completely on the task at hand."},
+{id:34,tp:"word",w:"Expend",tr:"Harcamak/Sarf etmek",c:"#f59e0b",e:"He expends a great deal of energy on this.",t:"Buna cok fazla enerji sarf ediyor.",e2:"Do not expend all your resources at once.",t2:"Tum kaynaklarini bir anda tuketme.",sw:"Spend",se:"She spent all her savings on the trip.",aw:"Save",ae:"He saved money for years to buy a house."},
+{id:35,tp:"word",w:"Exempt",tr:"Muaf tutmak",c:"#14b8a6",e:"Students are exempt from paying this tax.",t:"Ogrenciler bu vergiden muaf.",e2:"Nobody is completely exempt from the law.",t2:"Kimse yasadan tamamen muaf degil.",sw:"Exclude",se:"Senior citizens were excluded from the fee.",aw:"Subject",ae:"Everyone is subject to the new regulations."},
+{id:36,tp:"word",w:"Convict",tr:"Mahkum etmek",c:"#ef4444",e:"He was convicted of first-degree murder.",t:"Birinci dereceden cinayetten mahkum edildi.",e2:"The jury convicted him on all charges.",t2:"Juri onu tum suclamalardan mahkum etti.",sw:"Sentence",se:"The judge sentenced him to ten years in prison.",aw:"Acquit",ae:"The court acquitted her of all charges."},
+{id:37,tp:"word",w:"Delay",tr:"Geciktirmek/Ertelemek",c:"#f97316",e:"The flight was delayed by two hours.",t:"Ucus iki saat gecikti.",e2:"Do not delay. Submit the form today.",t2:"Erteleme. Formu bugun teslim et.",sw:"Postpone",se:"The match was postponed due to heavy rain.",aw:"Rush",ae:"She rushed to finish the report on time."},
+{id:38,tp:"word",w:"Handle",tr:"Basa cikmak/Idare etmek",c:"#8b5cf6",e:"Can you handle this difficult situation?",t:"Bu zor durumla basa cikabilir misin?",e2:"She handles pressure very well.",t2:"Baski ile cok iyi bas ediyor.",sw:"Manage",se:"He managed the whole project by himself.",aw:"Neglect",ae:"He neglected his duties and was fired."},
+{id:39,tp:"word",w:"Attempt",tr:"Denemek/Girisim",c:"#3b82f6",e:"She attempted to climb the mountain alone.",t:"Daga yalniz tirnanmayi denedi.",e2:"This is my very last attempt.",t2:"Bu benim son girisimim.",sw:"Try",se:"He tried to solve the problem three times.",aw:"Give up",ae:"She gave up after the third failure."},
+{id:40,tp:"word",w:"Disrupt",tr:"Bozmak/Sekteye ugratmak",c:"#ef4444",e:"The noise disrupted the entire exam.",t:"Gurultu sinavin tamamini sekteye ugratti.",e2:"Technology has disrupted many industries.",t2:"Teknoloji pek cok sektoru alt ust etti.",sw:"Disturb",se:"The roadworks disturbed the whole neighbourhood.",aw:"Restore",ae:"Order was restored after the protests ended."},
+{id:41,tp:"word",w:"Influence",tr:"Etkilemek/Etki",c:"#a855f7",e:"Friends greatly influence your daily decisions.",t:"Arkadaslar gunluk kararlarini buyuk olcude etkiler.",e2:"She was deeply influenced by her mentor.",t2:"Rehberinden derinden etkilendi.",sw:"Impact",se:"The documentary had a huge impact on viewers.",aw:"Ignore",ae:"He ignored all outside pressure and succeeded."},
+{id:42,tp:"word",w:"Involve",tr:"Icermek/Dahil etmek",c:"#06b6d4",e:"The project involves a lot of detailed research.",t:"Proje cok fazla ayrintili arastirma iceriyor.",e2:"Please do not involve me in your arguments.",t2:"Lutfen beni tartismalar\u0131na dahil etme.",sw:"Include",se:"The price includes breakfast and dinner.",aw:"Exclude",ae:"He was excluded from the final decision."},
+{id:43,tp:"word",w:"Exclude",tr:"Haric tutmak/Dislamak",c:"#f59e0b",e:"The price excludes all applicable taxes.",t:"Fiyatlara hicbir vergi dahil degildir.",e2:"She felt completely excluded from the group.",t2:"Gruptan tamamen dislandigini hissetti.",sw:"Omit",se:"He omitted the most important details.",aw:"Include",ae:"Make sure to include everyone in the decision."},
+{id:44,tp:"word",w:"Consume",tr:"Tuketmek/Kaplamak",c:"#ef4444",e:"The fire consumed the entire building quickly.",t:"Yangin tum binayi hizla kapladi.",e2:"We consume far too much sugar every day.",t2:"Her gun cok fazla seker tuketiyoruz.",sw:"Devour",se:"He devoured the whole meal in minutes.",aw:"Preserve",ae:"We must preserve our natural resources."},
+{id:45,tp:"word",w:"Avoid",tr:"Kacinmak/Sakinmak",c:"#10b981",e:"You should avoid eating junk food regularly.",t:"Duzenli olarak abur cubur yemekten kacinmalisin.",e2:"He carefully avoided answering the question.",t2:"Soruyu yanitlamaktan ozenle kacindi.",sw:"Evade",se:"She evaded the question with a clever answer.",aw:"Confront",ae:"He confronted the problem head on."},
+{id:46,tp:"word",w:"Gain",tr:"Kazanmak/Elde etmek",c:"#10b981",e:"She gained a lot of experience working abroad.",t:"Yurt disinda calisarak cok fazla deneyim kazandi.",e2:"He gained weight during the long holiday.",t2:"Uzun tatil boyunca kilo aldi.",sw:"Acquire",se:"She acquired new skills during the training.",aw:"Lose",ae:"He lost all his savings in the investment."},
+{id:47,tp:"word",w:"Engage",tr:"Mesgul etmek/Katilmak",c:"#6366f1",e:"Good teachers know how to engage all students.",t:"Iyi ogretmenler tum ogrencileri nasil mesgul edece\u011fini bilir.",e2:"She is engaged to a very kind doctor.",t2:"Cok iyi kalpli bir doktorla nisanli.",sw:"Involve",se:"Try to involve everyone in the project.",aw:"Disengage",ae:"He disengaged from the conversation."},
+{id:48,tp:"word",w:"Consider",tr:"Dusunmek/Degerlendirmek",c:"#8b5cf6",e:"Please consider my offer very carefully.",t:"Teklifimi cok dikkatli bir sekilde degerlendirin lutfen.",e2:"Have you considered moving to another city?",t2:"Baska bir sehire tasinmayi dusundun mu?",sw:"Contemplate",se:"He contemplated the decision for a long time.",aw:"Dismiss",ae:"She dismissed the idea without any thought."},
+{id:49,tp:"word",w:"Resist",tr:"Direnmek/Karsi koymak",c:"#f97316",e:"I simply cannot resist eating chocolate.",t:"Cikolata yemeye direnmek benim icin imkansiz.",e2:"She resisted all the pressure from her boss.",t2:"Patronunun tum baskisina karsi koydu.",sw:"Oppose",se:"Many people opposed the new law strongly.",aw:"Yield",ae:"He finally yielded to their demands."},
+{id:50,tp:"word",w:"Reflect",tr:"Yansitmak/Dusunmek",c:"#14b8a6",e:"The still lake reflected the mountains perfectly.",t:"Durgun gol daglari mukemmel biciimde yansitti.",e2:"Take some time to reflect on your decisions.",t2:"Kararlar\u0131n uzerine dusunmek icin biraz zaman ayir.",sw:"Ponder",se:"She pondered the question for a long while.",aw:"React",ae:"He reacted without thinking and regretted it."},
+{id:51,tp:"word",w:"Determine",tr:"Belirlemek/Kararli olmak",c:"#3b82f6",e:"Scientists determined the exact age of the fossil.",t:"Bilim insanlari fosilin tam yasini belirledi.",e2:"She was determined to succeed no matter what.",t2:"Ne olursa olsun basarmayi kararliysdi.",sw:"Decide",se:"He decided to change careers completely.",aw:"Hesitate",ae:"She hesitated and lost the opportunity."},
+{id:52,tp:"word",w:"Grant",tr:"Izin vermek/Hibe",c:"#10b981",e:"The bank finally granted him a loan.",t:"Banka sonunda ona kredi verdi.",e2:"Never take your privileges for granted.",t2:"Ayrical\u0131klarinin k\u0131ymetini asla bilmez olma.",sw:"Allow",se:"They allowed him to leave early.",aw:"Deny",ae:"The request was denied without explanation."},
+{id:53,tp:"word",w:"Cover",tr:"Kapsamak/Ortmek",c:"#6366f1",e:"Does your insurance cover dental treatment?",t:"Sigortaniz dis tedavisini kapsiyor mu?",e2:"She covered her face with both hands.",t2:"Yuzunu iki eliyle ortu.",sw:"Include",se:"The fee includes all materials needed.",aw:"Expose",ae:"The journalist exposed the hidden truth."},
+{id:54,tp:"word",w:"Impact",tr:"Etkilemek/Etki",c:"#ef4444",e:"Social media has a huge impact on young people.",t:"Sosyal medyanin gencler uzerinde buyuk etkisi var.",e2:"The decision impacted thousands of people.",t2:"Karar binlerce kisiyi etkiledi.",sw:"Affect",se:"The cold weather affected everyones mood.",aw:"Spare",ae:"The new rules spared small businesses."},
+{id:55,tp:"word",w:"Frustrate",tr:"Sinir bozmak",c:"#f97316",e:"It really frustrates me when people are late.",t:"Insanlar gec kaldiginda gercekten sinirimi bozuyor.",e2:"The lack of progress frustrated the whole team.",t2:"Hic ilerleme olmamasi tum ekibi husrana ugratti.",sw:"Annoy",se:"His constant complaining annoyed everyone.",aw:"Satisfy",ae:"The result satisfied all the stakeholders."},
+{id:56,tp:"word",w:"Rip",tr:"Yirtmak/Koparmak",c:"#ef4444",e:"He ripped the page right out of the book.",t:"Sayfayi dogrudan kitaptan yirtti.",e2:"Her jacket was completely ripped at the shoulder.",t2:"Ceketinin omuzu tamamen yirtilmisti.",sw:"Tear",se:"She tore the contract into pieces.",aw:"Sew",ae:"She sewed the torn fabric back together."},
+{id:57,tp:"word",w:"Attract",tr:"Cekmek/Ilgisini cekmek",c:"#a855f7",e:"The city attracts millions of tourists every year.",t:"Sehir her yil milyonlarca turisti cekiyor.",e2:"What initially attracted you to this job?",t2:"Baslangicta bu ise seni ne cekti?",sw:"Draw",se:"The exhibit drew a large crowd.",aw:"Repel",ae:"His rude behaviour repelled everyone."},
+{id:58,tp:"word",w:"Embrace",tr:"Kucaklamak/Benimsemek",c:"#10b981",e:"She embraced her mother tightly at the airport.",t:"Havalimaninda annesini sikica kucakladi.",e2:"We should embrace change rather than fear it.",t2:"Degisimden korkmak yerine onu benimsemeli yiz.",sw:"Welcome",se:"They welcomed the new policy with open arms.",aw:"Reject",ae:"He rejected every new idea presented."},
+{id:59,tp:"word",w:"Attach",tr:"Eklemek/Baglamak",c:"#3b82f6",e:"Please attach your CV to the email.",t:"Lutfen ozgecmisinizi e-postaya ekleyin.",e2:"She is very emotionally attached to her hometown.",t2:"Memleketine duygusal olarak cok bagli.",sw:"Connect",se:"Connect the cable to the correct port.",aw:"Detach",ae:"Detach the file before sending the email."},
+{id:60,tp:"word",w:"Overwhelm",tr:"Bunaltmak/Ezmek",c:"#8b5cf6",e:"Do not let stress overwhelm you completely.",t:"Stresin seni tamamen bunaltmasina izin verme.",e2:"She was completely overwhelmed by the workload.",t2:"Is yogunlugundan tamamen bunaldi.",sw:"Overpower",se:"Fear overpowered his ability to think.",aw:"Calm",ae:"She calmed down after speaking to a friend."},
+{id:61,tp:"word",w:"Meet",tr:"Tanismak/Bulusmak",c:"#10b981",e:"We met in America for the very first time.",t:"Birinci kez Amerikada tanistik.",e2:"I cannot meet all your needs right now.",t2:"Su anda tum ihtiyaclarini karsilayamam.",sw:"Encounter",se:"She encountered her old teacher at the market.",aw:"Avoid",ae:"He avoided meeting her at all costs."},
+{id:62,tp:"word",w:"Right",tr:"Dogru/Hak/Tam",c:"#10b981",e:"You did the right thing by speaking up.",t:"Sesini yukselterek dogru olani yaptin.",e2:"I will be right back I promise.",t2:"Hemen donecegim soz veriyorum.",sw:"Correct",se:"Give me the correct answer this time.",aw:"Wrong",ae:"She made the wrong decision under pressure."},
+{id:63,tp:"word",w:"Offer",tr:"Teklif etmek/Sunmak",c:"#f59e0b",e:"He offered me a lift to the airport.",t:"Havalimanina birakacagini teklif etti.",e2:"Istanbul offers the most stunning views for photography.",t2:"Istanbul fotograf icin en muhte\u015fem manzaralari sunuyor.",sw:"Propose",se:"She proposed a solution to the problem.",aw:"Refuse",ae:"He refused every offer of help."},
+{id:64,tp:"word",w:"Grow",tr:"Buyumek/Artmak",c:"#10b981",e:"Children seem to grow up so quickly.",t:"Cocuklar o kadar cabuk buyuyor ki.",e2:"The economy has grown by two percent this year.",t2:"Ekonomi bu yil yuzde iki buyudu.",sw:"Expand",se:"The company expanded into new markets.",aw:"Shrink",ae:"The budget shrank considerably last year."},
+{id:65,tp:"word",w:"Concept",tr:"Kavram/Fikir",c:"#8b5cf6",e:"Online teaching is a relatively new concept.",t:"Online egitim nispeten yeni bir kavram.",e2:"People have very different concepts of success.",t2:"Insanlarin basari kavrami birbirinden cok farkli.",sw:"Idea",se:"It was a brilliant idea from the start.",aw:"Reality",ae:"The reality was far more complex than expected."},
+{id:66,tp:"word",w:"Address",tr:"Hitap etmek/Ele almak",c:"#3b82f6",e:"He addressed the issue of climate change in his speech.",t:"Konusmasinda iklim degisikligi meselesini ele aldi.",e2:"This issue must be addressed as soon as possible.",t2:"Bu mesele bir an once ele alinmali.",sw:"Tackle",se:"We must tackle corruption at every level.",aw:"Ignore",ae:"She ignored the real issue and moved on."},
+{id:67,tp:"word",w:"Pour",tr:"Dokmek/Akmak",c:"#06b6d4",e:"Pour the mixture slowly into a large bowl.",t:"Karisimi yavas yavas buyuk bir kaba bosaltin.",e2:"People were pouring into the streets in protest.",t2:"Insanlar protesto amaci ile sokaklara akiyordu.",sw:"Flow",se:"Water flowed freely down the mountain.",aw:"Absorb",ae:"The sponge absorbed all the liquid quickly."},
+{id:68,tp:"word",w:"Feed",tr:"Beslemek/Beslenme",c:"#10b981",e:"She feeds her baby every three hours.",t:"Bebe\u011fini her uc saatte bir besliyor.",e2:"Your Instagram feed is very cluttered.",t2:"Instagram akisin cok dag\u0131nik.",sw:"Nourish",se:"A balanced diet nourishes the whole body.",aw:"Starve",ae:"They were starving after the long journey."},
+{id:69,tp:"word",w:"Cool",tr:"Serin/Sakin",c:"#06b6d4",e:"Stay cool. Do not let them get to you.",t:"Sakin kal. Seni etkilemelerine izin verme.",e2:"Let the soup cool a little before eating.",t2:"Yemeden once corbanin biraz sogumasi bekle.",sw:"Calm",se:"She remained calm under extreme pressure.",aw:"Warm",ae:"The atmosphere gradually warmed up."},
+{id:70,tp:"word",w:"Count",tr:"Saymak/Onemli olmak",c:"#a855f7",e:"Every single vote counts in this election.",t:"Bu secimde her oy onemlidir.",e2:"Count your blessings each and every day.",t2:"Her gun nimetlerini say.",sw:"Matter",se:"What matters most is your effort.",aw:"Dismiss",ae:"He dismissed their opinions as irrelevant."},
+{id:71,tp:"word",w:"Lose",tr:"Kaybetmek",c:"#ef4444",e:"Do not lose hope. Keep pushing forward.",t:"Umudu kaybetme. Ilerlemeye devam et.",e2:"I completely lost my appetite after the bad news.",t2:"Kotu haberin ardindan istanim tamamen kacti.",sw:"Forfeit",se:"He forfeited the match by not showing up.",aw:"Gain",ae:"She gained a lot of experience abroad."},
+{id:72,tp:"word",w:"Require",tr:"Gerektirmek",c:"#6366f1",e:"Learning any language requires consistent practice.",t:"Herhangi bir dil ogrenmek tutarli pratik gerektirir.",e2:"A valid passport is required to travel abroad.",t2:"Yurt disina seyahat icin gecerli bir pasaport gereklidir.",sw:"Demand",se:"The job demands a high level of commitment.",aw:"Optional",ae:"Attendance is optional not mandatory."},
+{id:73,tp:"word",w:"Fire",tr:"Kovmak/Ates",c:"#f97316",e:"You are fired. Please clear your desk today.",t:"Kovuldunuz. Lutfen bugun masanizi toplayin.",e2:"The protestors set several cars on fire.",t2:"Gostericiler birka\u00e7 arabayi atese verdi.",sw:"Dismiss",se:"She was dismissed from her job without warning.",aw:"Hire",ae:"They hired twenty new employees last month."},
+{id:74,tp:"word",w:"Fail",tr:"Basarisiz olmak",c:"#ef4444",e:"Do not be afraid of failure. Learn from it.",t:"Basarisizliktan korkma. Ondan oren.",e2:"I failed to persuade him no matter what I said.",t2:"Ne soylediysem onu ikna edemedim.",sw:"Collapse",se:"The plan collapsed after two weeks.",aw:"Succeed",ae:"She succeeded on her very first attempt."},
+{id:75,tp:"word",w:"Hurry",tr:"Acele etmek",c:"#f59e0b",e:"Hurry up or we will definitely miss the bus.",t:"Cabuk ol yoksa otobusu kesinlikle kaciririz.",e2:"I am in a terrible hurry right now.",t2:"Su an cok acelemvar.",sw:"Rush",se:"She rushed to finish before the deadline.",aw:"Linger",ae:"He lingered over his coffee for an hour."},
+{id:76,tp:"word",w:"Lead",tr:"Onculuk etmek/Liderlik",c:"#eab308",e:"She leads the entire team with great confidence.",t:"Buyuk ozguveniyle tum ekibe liderlik ediyor.",e2:"Poor decisions often lead to serious consequences.",t2:"Kotu kararlar siklikla ciddi sonuclara yol acar.",sw:"Guide",se:"He guided the group through the forest.",aw:"Follow",ae:"She chose to follow rather than lead."},
+{id:77,tp:"word",w:"Bear",tr:"Katlanmak/Tasimak",c:"#8b5cf6",e:"I simply cannot bear this pain any longer.",t:"Bu aciya artik dayanamiyorum.",e2:"Istanbul still bears the marks of its long history.",t2:"Istanbul hala uzun tarihinin izlerini tasiyor.",sw:"Endure",se:"She endured years of hardship silently.",aw:"Abandon",ae:"He abandoned his responsibilities and left."},
+{id:78,tp:"word",w:"Think",tr:"Dusunmek/Sanmak",c:"#6366f1",e:"Think long and hard before making any decision.",t:"Herhangi bir karar vermeden once uzun ve derin dusunun.",e2:"Who exactly do you think you are?",t2:"Tam olarak sen kim oldugunu saniyorsun?",sw:"Contemplate",se:"He contemplated the offer for several days.",aw:"React",ae:"She reacted impulsively without thinking."},
+{id:79,tp:"word",w:"Work",tr:"Calismak/Ise yaramak",c:"#3b82f6",e:"Hard work always pays off in the very end.",t:"Siki calisma her zaman sonunda meyvesini verir.",e2:"Does this plan actually work in practice?",t2:"Bu plan pratikte gercekten ise yariyor mu?",sw:"Function",se:"The machine functions perfectly after the repair.",aw:"Fail",ae:"The strategy failed completely."},
+{id:80,tp:"word",w:"Act",tr:"Davranmak/Harekete gecmek",c:"#a855f7",e:"Stop acting like a complete child.",t:"Tam bir cocuk gibi davranmayi birak.",e2:"We need to act now before it is too late.",t2:"Cok gec olmadan simdi harekete gecmemiz gerekiyor.",sw:"Behave",se:"Please behave professionally at all times.",aw:"React",ae:"She reacted emotionally instead of acting logically."},
+{id:81,tp:"word",w:"Chance",tr:"Sans/Firsat",c:"#f59e0b",e:"Take your chance before it is completely too late.",t:"Cok gec olmadan sans\u0131n\u0131 dene.",e2:"There is a very good chance of rain tomorrow.",t2:"Yarin yagmur yagma ihtimali cok yuksek.",sw:"Opportunity",se:"This is a rare opportunity you must seize.",aw:"Certainty",ae:"There is no certainty about the outcome."},
+{id:82,tp:"word",w:"Last",tr:"Son/Surmek",c:"#8b5cf6",e:"This is your absolute last chance. Use it wisely.",t:"Bu kesinlikle son sansin. Akillica kullan.",e2:"How long did the entire meeting last?",t2:"Toplantinin tamami ne kadar surdu?",sw:"Endure",se:"The paint endured for over ten years.",aw:"End",ae:"The agreement ended after six months."},
+{id:83,tp:"word",w:"Back",tr:"Geri/Destek vermek",c:"#6366f1",e:"I will be back in exactly ten minutes.",t:"Tam on dakika icinde geri donecegim.",e2:"She backed him up when he needed it the most.",t2:"En cok ihtiyac duydu\u011funda onu destekledi.",sw:"Support",se:"I will support you no matter what happens.",aw:"Oppose",ae:"He opposed the decision from the beginning."},
+{id:84,tp:"word",w:"Hide",tr:"Saklamak/Gizlemek",c:"#a855f7",e:"You simply cannot hide the truth forever.",t:"Gercegi sonsuza kadar saklayamazs\u0131n.",e2:"The children hid under the bed giggling.",t2:"Cocuklar k\u0131k\u0131rdayarak yatagin alt\u0131na sakland\u0131.",sw:"Conceal",se:"She concealed her true feelings for years.",aw:"Reveal",ae:"He finally revealed the shocking truth."},
+{id:85,tp:"word",w:"Form",tr:"Olusturmak/Form",c:"#3b82f6",e:"Please fill in this form completely and carefully.",t:"Lutfen bu formu eksiksiz ve dikkatli doldurun.",e2:"Ice is simply water in a solid form.",t2:"Buz kati formda basitce sudur.",sw:"Shape",se:"The experience shaped her entire character.",aw:"Dissolve",ae:"The committee was dissolved last year."},
+{id:86,tp:"word",w:"Mark",tr:"Isaret/Not/Iz",c:"#f97316",e:"She got very high marks in the exam.",t:"Sinavdan cok yuksek not aldi.",e2:"This day will mark a real turning point in history.",t2:"Bu gun tarihte gercek bir donum noktasi olarak anilacak.",sw:"Score",se:"He scored the highest in the class.",aw:"Erase",ae:"She erased all traces of the mistake."},
+{id:87,tp:"word",w:"Rate",tr:"Oran/Degerlendirmek",c:"#eab308",e:"The unemployment rate has risen sharply this year.",t:"Issizlik orani bu yil keskin biciimde yukseldi.",e2:"How would you rate your overall English skills?",t2:"Genel Ingilizce becerilerinizi nasil degerlendirirsiniz?",sw:"Assess",se:"She assessed the risks before making a decision.",aw:"Ignore",ae:"He ignored the feedback completely."},
+{id:88,tp:"word",w:"Tell",tr:"Soylemek/Anlatmak",c:"#06b6d4",e:"Can you tell me exactly what happened?",t:"Bana tam olarak ne oldugunu anlatabilir misin?",e2:"I can clearly tell that you are nervous.",t2:"Sinirli oldugunu acikca anliyorum.",sw:"Inform",se:"Please inform me of any changes immediately.",aw:"Conceal",ae:"He concealed the truth from everyone."},
+{id:89,tp:"word",w:"Hold",tr:"Tutmak/Beklemek",c:"#8b5cf6",e:"Hold on just a moment. I will be right with you.",t:"Sadece bir an bekleyin. Hemen geleyim.",e2:"The stadium can hold up to 50 thousand people.",t2:"Stadyum 50 bin kisiye kadar kapasitelidir.",sw:"Contain",se:"The jar contains exactly one litre.",aw:"Release",ae:"They released the prisoners after the trial."},
+{id:90,tp:"word",w:"Drive",tr:"Arac surmek/Itmek",c:"#3b82f6",e:"What drives you to work this incredibly hard?",t:"Seni bu kadar inanilmaz calismaya iten nedir?",e2:"She drove me to the station yesterday.",t2:"Dun beni istasyona birakti.",sw:"Motivate",se:"He motivates his team with daily goals.",aw:"Discourage",ae:"Constant criticism discouraged her."},
+{id:91,tp:"word",w:"Strike",tr:"Carpmak/Greve gitmek",c:"#f97316",e:"A brilliant idea struck me in the shower.",t:"Dusta harika bir fikir aklima geldi.",e2:"The workers went on strike for higher wages.",t2:"Isciler daha yuksek ucret icin greve gitti.",sw:"Hit",se:"The ball hit the target perfectly.",aw:"Miss",ae:"The arrow missed the target completely."},
+{id:92,tp:"word",w:"Stick",tr:"Yapismak/Bagli kalmak",c:"#a855f7",e:"Stick to your goals absolutely no matter what.",t:"Ne olursa olsun kesinlikle hedeflerine bagli kal.",e2:"The label simply will not stick to this surface.",t2:"Etiket bu yuzeye bir turlu yapism\u0131yor.",sw:"Adhere",se:"She adhered to the rules at all times.",aw:"Abandon",ae:"He abandoned his principles under pressure."},
+{id:93,tp:"word",w:"Move",tr:"Hareket etmek/Tasinmak",c:"#06b6d4",e:"The film moved me deeply to tears.",t:"Film beni derinden gozyaslarina bogdu.",e2:"We are moving to a new house next month.",t2:"Gelecek ay yeni bir eve tasiniyoruz.",sw:"Transfer",se:"She transferred to a different department.",aw:"Stay",ae:"He decided to stay in the same city."},
+{id:94,tp:"word",w:"Place",tr:"Yer/Koymak",c:"#6366f1",e:"Place the order as soon as absolutely possible.",t:"Siparisi mumkun oldugu kadar cabuk ver.",e2:"I cannot place where I have seen her before.",t2:"Onu daha once nerede gordugumu hatirlayamiyorum.",sw:"Put",se:"Put the documents on my desk please.",aw:"Remove",ae:"Remove all unnecessary items from the list."},
+{id:95,tp:"word",w:"Turn",tr:"Donmek/Sira",c:"#f59e0b",e:"It is your turn to wash the dishes tonight.",t:"Bu gece bulasilari yikama sirasi sende.",e2:"The weather has turned very cold suddenly.",t2:"Hava aniden cok sogdu.",sw:"Rotate",se:"Rotate the handle clockwise to open.",aw:"Stay",ae:"She decided to stay in her original position."},
+{id:96,tp:"word",w:"Raise",tr:"Yukseltmek/Yetistirmek",c:"#10b981",e:"She was born and raised in Konya.",t:"Konyada dogup buyudu.",e2:"The scandal raised very serious concerns.",t2:"Skandal cok ciddi endishelere neden oldu.",sw:"Lift",se:"She lifted the heavy box effortlessly.",aw:"Lower",ae:"They lowered the price to attract buyers."},
+{id:97,tp:"word",w:"Save",tr:"Kurtarmak/Biriktirmek",c:"#3b82f6",e:"You saved me from making a terrible mistake.",t:"Korkunc bir hata yapmaktan beni kurtard\u0131n.",e2:"I am trying hard to save money for a car.",t2:"Araba icin para biriktirmeye cok calisiyorum.",sw:"Rescue",se:"He rescued the child from the burning building.",aw:"Waste",ae:"She wasted all her savings on luxury items."},
+{id:98,tp:"word",w:"Spread",tr:"Yayilmak/Yaymak",c:"#a855f7",e:"The news spread across the entire country in hours.",t:"Haber saatler icinde ulkenin tamamina yayildi.",e2:"Spread the butter evenly across the bread.",t2:"Ekme\u011fe tereyagini esit sekilde sur.",sw:"Expand",se:"The fire expanded rapidly through the forest.",aw:"Contain",ae:"They managed to contain the outbreak quickly."},
+{id:99,tp:"word",w:"Develop",tr:"Gelistirmek/Buyumek",c:"#10b981",e:"She developed a very strong interest in science.",t:"Bilime karsi cok guclu bir ilgi gelistirdi.",e2:"A new problem has developed since last week.",t2:"Gecen haftadan bu yana yeni bir sorun ortaya cikti.",sw:"Grow",se:"His confidence grew over time.",aw:"Decline",ae:"Her health declined rapidly after the diagnosis."},
+{id:100,tp:"word",w:"Progress",tr:"Ilerleme/Ilerlemek",c:"#10b981",e:"She has made incredible progress in her English.",t:"Ingilizcesinde inanilmaz ilerleme kaydetti.",e2:"Work is progressing well on the new building.",t2:"Yeni binada calismalar yolunda ilerliyor.",sw:"Advance",se:"Technology has advanced at an incredible rate.",aw:"Regress",ae:"Without practice skills regress quickly."},
+{id:101,tp:"word",w:"Keep",tr:"Tutmak/Sudurmek",c:"#10b981",e:"Keep your word. Never make promises you cannot keep.",t:"Sozunu tut. Tutamayacagin sozler asla verme.",e2:"He just keeps calling me even though I said no.",t2:"Hayir dememe ragmen aramaya devam ediyor.",sw:"Maintain",se:"She maintained her position throughout the debate.",aw:"Break",ae:"He broke every promise he ever made."},
+{id:102,tp:"word",w:"Space",tr:"Bosluk/Uzay/Alan",c:"#6366f1",e:"I need some personal space to think things through.",t:"Dusunmek icin biraz kisisel alana ihtiyacim var.",e2:"Leave enough space between you and the car in front.",t2:"Onundeki aracla aranizda yeterli mesafe birakin.",sw:"Gap",se:"There is a clear gap between the two ideas.",aw:"Crowd",ae:"Do not crowd me. Give me some room."},
+{id:103,tp:"word",w:"Present",tr:"Simdi/Mevcut/Hediye",c:"#f59e0b",e:"Try to live fully in the present not the past.",t:"Gecmiste degil tamamen su anda yasamaya calisin.",e2:"She was not present at the important meeting.",t2:"Onemli toplantida yoktu.",sw:"Current",se:"What is the current situation in the region?",aw:"Absent",ae:"He was absent from class for a whole week."},
+{id:104,tp:"word",w:"Consider2",tr:"Dusunmek/Degerlendirmek2",c:"#8b5cf6",e:"Consider the feelings of others before you speak.",t:"Konusmadan once baskalarin duygularini dusunun.",e2:"Take all costs into consideration before deciding.",t2:"Karar vermeden once tum maliyetleri goz onunde bulundurun.",sw:"Reflect",se:"Reflect carefully on the consequences first.",aw:"Dismiss",ae:"He dismissed every suggestion without thought."},
+{id:105,tp:"word",w:"Considerable",tr:"Onemli miktarda",c:"#8b5cf6",e:"There has been a considerable amount of progress made.",t:"Onemli miktarda ilerleme kaydedildi.",e2:"Inflation has risen considerably this year.",t2:"Enflasyon bu yil onemli olcude ardi.",sw:"Significant",se:"There was a significant drop in temperatures.",aw:"Negligible",ae:"The difference was negligible and hardly noticeable."},
+{id:106,tp:"word",w:"Convince",tr:"Ikna etmek",c:"#10b981",e:"I tried hard to convince him but he refused to listen.",t:"Onu ikna etmeye cok calistim ama dinlemeyi reddetti.",e2:"She convinced her parents to let her study abroad.",t2:"Ailesini yurt disinda okumak icin ikna etti.",sw:"Persuade",se:"He persuaded everyone to vote for the plan.",aw:"Discourage",ae:"She discouraged him from taking the risk."},
+{id:107,tp:"word",w:"Expose",tr:"Maruz birakmak",c:"#f97316",e:"The journalist bravely exposed the corruption.",t:"Gazeteci yolsuzlugu cesurca aciga cikardi.",e2:"Do not expose your skin to direct sunlight too long.",t2:"Cildinizi cok uzun sure dogrudan gunese maruz birakmay\u0131n.",sw:"Reveal",se:"She revealed the hidden agenda.",aw:"Conceal",ae:"He concealed the evidence from investigators."},
+{id:108,tp:"word",w:"Extend",tr:"Uzatmak/Genisletmek",c:"#14b8a6",e:"They extended the deadline by one full week.",t:"Son teslim tarihini bir tam hafta uzattilar.",e2:"The forest extends for hundreds of kilometres.",t2:"Orman yuzlerce kilometre boyunca uzaniyor.",sw:"Prolong",se:"The meeting was prolonged due to the debate.",aw:"Shorten",ae:"They shortened the course to six weeks."},
+{id:109,tp:"word",w:"Ensure",tr:"Saglamak/Garantilemek",c:"#3b82f6",e:"Please ensure all windows are closed before leaving.",t:"Ayr\u0131lmadan once tum pencerelerin kapali oldugundan emin olun.",e2:"We must ensure the safety of every passenger.",t2:"Her yolcunun guvenligini saglamaliyiz.",sw:"Guarantee",se:"We guarantee full satisfaction or a refund.",aw:"Neglect",ae:"She neglected to check the safety measures."},
+{id:110,tp:"word",w:"Alter",tr:"Degistirmek/Tadilat",c:"#f59e0b",e:"Nothing can alter the fact that he lied to us.",t:"Bize yalan soyledigi gercegini hicbir sey degistiremez.",e2:"She had the dress altered to fit her perfectly.",t2:"Elbiseyi kendine mukemmel oturmasi icin degistirtti.",sw:"Modify",se:"She modified her plan after the feedback.",aw:"Preserve",ae:"They preserved the original design of the building."},
+{id:111,tp:"word",w:"Neglect",tr:"Ihmal etmek",c:"#ef4444",e:"Never neglect your health while working hard.",t:"Cok cal\u0131s\u0131rken sagligini asla ihmal etme.",e2:"The historic building was neglected for many years.",t2:"Tarihi bina uzun yillar boyunca ihmal edildi.",sw:"Ignore",se:"He ignored all the warning signs.",aw:"Maintain",ae:"She maintained the garden perfectly all year."},
+{id:112,tp:"word",w:"Cope",tr:"Basa cikmak",c:"#10b981",e:"How do you manage to cope with all this stress?",t:"Tum bu stresle nasil basa cikiyorsun?",e2:"She struggled greatly to cope with the job loss.",t2:"Isini kaybetmenin ustesinden gelmekte cok zorland\u0131.",sw:"Manage",se:"He managed the crisis better than expected.",aw:"Collapse",ae:"She collapsed under the enormous pressure."},
+{id:113,tp:"word",w:"Abandon",tr:"Terk etmek",c:"#ef4444",e:"He abandoned his car right on the motorway.",t:"Arabasini dogrudan otoyolun uzerinde terk etti.",e2:"She abandoned all her plans to move abroad.",t2:"Yurt disina tasinma planlarinin tamam\u0131ndan vazgecti.",sw:"Desert",se:"He deserted his family without explanation.",aw:"Commit",ae:"She committed to the project fully."},
+{id:114,tp:"word",w:"Pursue",tr:"Takip etmek",c:"#6366f1",e:"She decided to pursue a career in medicine.",t:"Tip alaninda kariyer yapmaya karar verdi.",e2:"The police pursued the suspect across the city.",t2:"Polis supheliyi sehir genelinde takip etti.",sw:"Chase",se:"He chased the opportunity without hesitation.",aw:"Abandon",ae:"She abandoned her dreams too early."},
+{id:115,tp:"word",w:"Protest",tr:"Protesto etmek",c:"#f97316",e:"Thousands took to the streets to protest.",t:"Binlerce kisi protesto icin sokaklara dokuldu.",e2:"She protested her total innocence to the very end.",t2:"Sonuna kadar tam anlamiyla masumiyetini savundu.",sw:"Object",se:"He objected strongly to the new rule.",aw:"Accept",ae:"She accepted the decision without complaint."},
+{id:116,tp:"word",w:"Justify",tr:"Hakli gostermek",c:"#3b82f6",e:"Can you really justify spending that much money?",t:"Bu kadar para harcamayi gercekten hakli gosterebilir misin?",e2:"Nothing can justify treating people this way.",t2:"Insanlara bu sekilde davranmayi hicbir sey hakli kilamaz.",sw:"Defend",se:"He defended his decision in court.",aw:"Condemn",ae:"She condemned the action as unacceptable."},
+{id:117,tp:"word",w:"Threaten",tr:"Tehdit etmek",c:"#ef4444",e:"He threatened to leave if things did not change.",t:"Isler degismezse gidecegini tehdit etti.",e2:"Climate change threatens many species survival.",t2:"Iklim degisikligi pek cok turun hayatta kalmasini tehdit ediyor.",sw:"Intimidate",se:"The large crowd intimidated the speaker.",aw:"Protect",ae:"She protected him from all external threats."},
+{id:118,tp:"word",w:"Overcome",tr:"Ustesinden gelmek",c:"#10b981",e:"She overcame her deep fear of public speaking.",t:"Topluluk onunde konusma korkusunun ustesinden geldi.",e2:"Nothing worth having comes without overcoming challenges.",t2:"Degerli hicbir sey zorluklarla yuzlesmeden elde edilmez.",sw:"Conquer",se:"He conquered his fear of heights.",aw:"Surrender",ae:"She surrendered to the pressure eventually."},
+{id:119,tp:"word",w:"Acquire",tr:"Edinmek/Elde etmek",c:"#8b5cf6",e:"She acquired a genuine taste for classical music.",t:"Klasik muzige karsi gercek bir zevk edindi.",e2:"The company acquired three smaller businesses.",t2:"Sirket uc kucuk isletme satin aldi.",sw:"Obtain",se:"She obtained the necessary permissions.",aw:"Lose",ae:"He lost everything in the bankruptcy."},
+{id:120,tp:"word",w:"Hesitate",tr:"Tereddut etmek",c:"#a855f7",e:"Do not hesitate to ask for help when you need it.",t:"Ihtiyac duydu\u011funda yardim istemekten cekinme.",e2:"She hesitated briefly before finally answering.",t2:"Cevaplamadan once kisa sure tereddut etti.",sw:"Pause",se:"He paused before giving his final answer.",aw:"Decide",ae:"She decided immediately without any doubt."},
+{id:121,tp:"word",w:"Shift",tr:"Degistirmek/Vardiya",c:"#f59e0b",e:"There has been a significant shift in public opinion.",t:"Kamuoyunda onemli bir degisim yasandi.",e2:"She works the night shift at the hospital.",t2:"Hastanede gece vardiyasinda calisiyor.",sw:"Change",se:"The change in weather was sudden.",aw:"Stabilize",ae:"The economy finally stabilized after years."},
+{id:122,tp:"word",w:"Detect",tr:"Tespit etmek",c:"#3b82f6",e:"Early detection of cancer genuinely saves lives.",t:"Kanserin erken tespiti gercekten hayat kurtarir.",e2:"The security system detected an intruder.",t2:"Guvenlik sistemi bir davetsiz misafir tespit etti.",sw:"Discover",se:"She discovered the error in time.",aw:"Miss",ae:"He missed the obvious signs of trouble."},
+{id:123,tp:"word",w:"Collapse",tr:"Cokmek/Bayilmak",c:"#ef4444",e:"The bridge collapsed under the weight of trucks.",t:"Kopru kamyonlarin agirlig\u0131 altinda cokt\u00fc.",e2:"She collapsed completely from exhaustion after the race.",t2:"Yaristan sonra yorgunluktan tamamen cokt\u00fc.",sw:"Fall",se:"The empire fell after centuries of power.",aw:"Stand",ae:"The building stood strong through the earthquake."},
+{id:124,tp:"word",w:"Emerge",tr:"Ortaya cikmak",c:"#f97316",e:"A fascinating new theory has emerged in recent years.",t:"Son yillarda buyuleyici yeni bir teori ortaya cikti.",e2:"She emerged from the meeting looking very confident.",t2:"Toplantidan cok guvenli gor\u00fcnerek cikti.",sw:"Appear",se:"A solution finally appeared after weeks.",aw:"Disappear",ae:"The symptoms disappeared after treatment."},
+{id:125,tp:"word",w:"Promote",tr:"Terfi ettirmek",c:"#10b981",e:"She was promoted to manager after just two years.",t:"Sadece iki yilin ardindan mudurluge terfi etti.",e2:"The campaign promotes healthy eating habits.",t2:"Kampanya saglikli beslenme aliskanliklarini destekliyor.",sw:"Advance",se:"He advanced quickly through the ranks.",aw:"Demote",ae:"He was demoted after the scandal."},
+{id:126,tp:"word",w:"Assess",tr:"Degerlendirmek",c:"#8b5cf6",e:"The doctor carefully assessed the patient condition.",t:"Doktor hastanin durumunu dikkatle degerlendirdi.",e2:"We must assess all risks before proceeding.",t2:"Ilerlemeden once tum riskleri degerlendirmeliyiz.",sw:"Evaluate",se:"They evaluated all the options carefully.",aw:"Overlook",ae:"He overlooked the most critical detail."},
+{id:127,tp:"word",w:"Perceive",tr:"Algilamak/Fark etmek",c:"#6366f1",e:"How exactly do you perceive this complex situation?",t:"Bu karmasik durumu tam olarak nasil algiliyorsunuz?",e2:"She is widely perceived as one of the best.",t2:"Genellikle en iyilerden biri olarak goruluyor.",sw:"Notice",se:"He noticed a pattern in the data.",aw:"Overlook",ae:"She overlooked the most important detail."},
+{id:128,tp:"word",w:"Cease",tr:"Durmak/Sona ermek",c:"#ef4444",e:"The noise ceased the moment she entered the room.",t:"O odaya girer girmez gurultu durdu.",e2:"The company ceased all its operations last month.",t2:"Sirket gecen ay tum faaliyetlerini durdurdu.",sw:"Stop",se:"Production stopped due to the strike.",aw:"Continue",ae:"She continued despite all the obstacles."},
+{id:129,tp:"word",w:"Wander",tr:"Dolashmak/Dag\u0131lmak",c:"#8b5cf6",e:"She wandered alone through the quiet streets.",t:"Sessiz sokaklarda tek basina dolasti.",e2:"My mind tends to wander during long meetings.",t2:"Uzun toplantilarda dikkatim dagilma egilimindedir.",sw:"Roam",se:"He roamed the city for hours without purpose.",aw:"Focus",ae:"She focused entirely on the task ahead."},
+{id:130,tp:"word",w:"Neglect2",tr:"Ihmal etmek2",c:"#ef4444",e:"Do not neglect your health no matter how busy you are.",t:"Ne kadar mesgul olursan ol sagligini ihmal etme.",e2:"The old park was neglected for many years.",t2:"Eski park uzun yillar boyunca ihmal edildi.",sw:"Disregard",se:"He disregarded all the safety warnings.",aw:"Attend to",ae:"She attended to every detail carefully."},
+{id:131,tp:"pattern",w:"Put up with",tr:"Katlanmak/Tahammul",c:"#6366f1",e:"I simply cannot put up with this noise anymore.",t:"Bu gurult\u00fcye artik dayanamiyorum.",e2:"How do you put up with such constant pressure?",t2:"Bu kadar surekli baskiya nasil katlaniyorsun?",sw:"Tolerate",se:"She tolerated his rudeness for too long.",aw:"Refuse",ae:"He finally refused to accept the situation."},
+{id:132,tp:"pattern",w:"Come up with",tr:"Bulmak/Akla getirmek",c:"#f59e0b",e:"She came up with a truly brilliant idea.",t:"Gercekten harika bir fikir buldu.",e2:"Can you come up with a better solution?",t2:"Daha iyi bir cozum bulabilir misin?",sw:"Devise",se:"He devised a clever plan to solve it.",aw:"Fail",ae:"She failed to think of any solution."},
+{id:133,tp:"pattern",w:"Run out of",tr:"Tukenmek/Bitmek",c:"#ef4444",e:"We ran out of time before finishing the exam.",t:"Sinavi bitirmeden vaktimiz tukendi.",e2:"She completely ran out of patience.",t2:"Sabri tamamen tukendi.",sw:"Exhaust",se:"They exhausted all available options.",aw:"Replenish",ae:"She replenished her energy with rest."},
+{id:134,tp:"pattern",w:"Look forward to",tr:"Dort gozle beklemek",c:"#10b981",e:"I look forward to hearing from you soon.",t:"En kisa surede haber almanizi dort gozle bekliyorum.",e2:"She really looks forward to the weekend.",t2:"Hafta sonunu gercekten dort gozle bekliyor.",sw:"Anticipate",se:"Everyone anticipated the exciting news.",aw:"Dread",ae:"He dreaded going to the dentist."},
+{id:135,tp:"pattern",w:"Let sb down",tr:"Hayal kirikligi yaratmak",c:"#ef4444",e:"He let me down at the very worst possible moment.",t:"Beni en kotu anda yuz ustu birakti.",e2:"Do not let your whole team down like that.",t2:"Butun takimini bu sekilde hayal kirikl\u00edg\u0131na ugratma.",sw:"Disappoint",se:"She disappointed everyone with the results.",aw:"Impress",ae:"He impressed everyone beyond expectations."},
+{id:136,tp:"pattern",w:"Get along with",tr:"Iyi gecimek/Anlashmak",c:"#10b981",e:"I get along very well with all my colleagues.",t:"Tum meslektaslarimla cok iyi geciniyorum.",e2:"Do you get along well with your neighbours?",t2:"Komsularinla iyi geciniyor musun?",sw:"Bond",se:"They bonded quickly over shared interests.",aw:"Clash",ae:"They clashed constantly over small issues."},
+{id:137,tp:"pattern",w:"Break down",tr:"Bozulmak/Cokmek",c:"#8b5cf6",e:"The car broke down on the busy highway.",t:"Araba kalabalik otoyolda bozuldu.",e2:"She broke down crying after hearing the news.",t2:"Haberi duyduktan sonra aglararak cokt\u00fc.",sw:"Collapse",se:"The whole system collapsed under pressure.",aw:"Function",ae:"Everything functioned perfectly on the day."},
+{id:138,tp:"pattern",w:"Come down with",tr:"Hastalanmak/Yakalanmak",c:"#ef4444",e:"He came down with a bad flu last week.",t:"Gecen hafta kotu bir grip oldu.",e2:"I think I am coming down with something serious.",t2:"San\u0131r\u0131m ciddi bir seye yakalan\u0131yorum.",sw:"Contract",se:"She contracted a serious illness abroad.",aw:"Recover",ae:"He recovered fully within just two weeks."},
+{id:139,tp:"pattern",w:"Get away with",tr:"Cezasiz kurtulmak",c:"#f97316",e:"He got away with cheating on the exam.",t:"Sinavda kopya cekmekten s\u0131y\u0131rd\u0131.",e2:"You simply will not get away with this forever.",t2:"Bundan sonsuza kadar siy\u0131lamazs\u0131n.",sw:"Escape",se:"She escaped punishment due to a technicality.",aw:"Face",ae:"He finally faced the consequences of his actions."},
+{id:140,tp:"pattern",w:"Fall apart",tr:"Dag\u0131lmak/Parcalanmak",c:"#ef4444",e:"The dress fell completely apart after just two washes.",t:"Elbise sadece iki yikamadan sonra tamamen dagaldi.",e2:"My whole life feels like it is falling apart.",t2:"Tum hayatim da\u011f\u0131l\u0131yor gibi hissediyorum.",sw:"Disintegrate",se:"The old bridge slowly disintegrated.",aw:"Hold together",ae:"The team held together under pressure."},
+{id:141,tp:"pattern",w:"Be used to",tr:"Alisk\u0131n olmak",c:"#14b8a6",e:"She is used to waking up very early every morning.",t:"Her sabah cok erken uyanmaya al\u0131sk\u0131n.",e2:"Are you used to working under this kind of pressure?",t2:"Bu tur baski altinda calismaya alisk\u0131n misin?",sw:"Accustomed",se:"He is accustomed to long working hours.",aw:"Unfamiliar",ae:"She was unfamiliar with the new software."},
+{id:142,tp:"pattern",w:"Get used to",tr:"Alismak",c:"#10b981",e:"You will eventually get used to the cold weather.",t:"Sonunda soguk havaya alisacaksin.",e2:"It took a long time to get used to the new system.",t2:"Yeni sisteme alismak uzun zaman aldi.",sw:"Adapt",se:"She adapted to the new culture easily.",aw:"Struggle",ae:"He still struggled with the new routine."},
+{id:143,tp:"pattern",w:"Used to",tr:"Eskiden yapmak",c:"#a855f7",e:"I used to go to the gym every single day.",t:"Eskiden her gun spor salonuna giderdim.",e2:"She used to smoke but quit years ago.",t2:"Eskiden sigara icerdi ama yillar once birakti.",sw:"Formerly",se:"He was formerly a professional athlete.",aw:"Nowadays",ae:"Nowadays she prefers working from home."},
+{id:144,tp:"pattern",w:"Take for granted",tr:"Kiymetini bilmemek",c:"#f59e0b",e:"Never take your health for granted.",t:"Sagliginin kiymetini asla bilmez olma.",e2:"We take clean water for granted every day.",t2:"Temiz suyun kiymetini her gun bilmiyoruz.",sw:"Undervalue",se:"He undervalued her contribution significantly.",aw:"Appreciate",ae:"She appreciated every opportunity she received."},
+{id:145,tp:"pattern",w:"Make up for",tr:"Telafi etmek",c:"#3b82f6",e:"I will definitely make up for the lost time.",t:"Kaybettigim zamani kesinlikle telafi edecegim.",e2:"No money can make up for such a mistake.",t2:"Hicbir para boyle bir hatay\u0131 telafi edemez.",sw:"Compensate",se:"He compensated her for the damage done.",aw:"Worsen",ae:"His apology only worsened the situation."},
+{id:146,tp:"pattern",w:"Take into account",tr:"Hesaba katmak",c:"#8b5cf6",e:"You need to take all the risks into account.",t:"Tum riskleri hesaba katman gerekiyor.",e2:"Please take my suggestion into full account.",t2:"Lutfen onerimi tam olarak goz onunde bulundur.",sw:"Consider",se:"Consider all the factors before deciding.",aw:"Ignore",ae:"She ignored all the advice given."},
+{id:147,tp:"pattern",w:"Not only but also",tr:"Sadece degil ayni zamanda",c:"#10b981",e:"She is not only intelligent but also very hardworking.",t:"O sadece zeki degil ayni zamanda cok cal\u0131skan.",e2:"Not only did he lie but he also blamed others.",t2:"Sadece yalan soylemedi ayni zamanda baskalari sucladi.",sw:"Furthermore",se:"Furthermore the results were outstanding.",aw:"Neither nor",ae:"Neither the plan nor the backup worked."},
+{id:148,tp:"pattern",w:"Result in",tr:"Sonuclanmak/Yol acmak",c:"#f97316",e:"Overeating can seriously result in health problems.",t:"Asiri yemek ciddi saglik sorunlarina yol acabilir.",e2:"Hard work consistently results in success.",t2:"Siki calisma surekli olarak basariyla sonuclaniyor.",sw:"Cause",se:"Poor planning caused many delays.",aw:"Prevent",ae:"She prevented a major disaster with quick thinking."},
+{id:149,tp:"pattern",w:"Tend to",tr:"Egiliminde olmak",c:"#a855f7",e:"People tend to eat more when they feel stressed.",t:"Insanlar stresli hissettiklerinde daha fazla yeme egilimindedir.",e2:"She tends to arrive late to most meetings.",t2:"Cogu toplantiya gec gelme egilimindedir.",sw:"Incline",se:"He inclines towards the more cautious option.",aw:"Avoid",ae:"She avoids making hasty decisions."},
+{id:150,tp:"pattern",w:"Develop a habit of",tr:"Aliskanlik edinmek",c:"#3b82f6",e:"Develop a strong habit of reading every night.",t:"Her gece okuma aliskanlig\u0131 edin.",e2:"She developed a bad habit of checking her phone constantly.",t2:"Surekli telefonunu kontrol etme kotu aliskanl\u0131\u011f\u0131 gelistirdi.",sw:"Cultivate",se:"Cultivate the habit of daily exercise.",aw:"Break",ae:"He finally broke his bad habits."},
+{id:151,tp:"pattern",w:"Keep up with",tr:"Ayak uydurmak",c:"#f97316",e:"It is becoming harder to keep up with technology.",t:"Teknolojiye ayak uydurmak giderek zorlasiyor.",e2:"She struggles to keep up with the fast pace.",t2:"Hizli tempoyla ayak uydurmakta zorlan\u0131yor.",sw:"Follow",se:"Follow the latest trends in the field.",aw:"Fall behind",ae:"He fell behind with his coursework."},
+{id:152,tp:"pattern",w:"Go through",tr:"Gecirmek/Yasamak",c:"#8b5cf6",e:"She went through a very difficult personal period.",t:"Cok zor bir kisisel donemden gecti.",e2:"Go through the contract carefully before signing.",t2:"Imzalamadan once sozlesmeyi dikkatle incele.",sw:"Experience",se:"He experienced great hardship in his youth.",aw:"Avoid",ae:"She avoided facing the truth."},
+{id:153,tp:"pattern",w:"Carry out",tr:"Gerceklestirmek",c:"#14b8a6",e:"The experiment was carried out under strict conditions.",t:"Deney siki kosullar altinda gerceklestirildi.",e2:"She carried out all her duties professionally.",t2:"Gorevlerinin tamamini profesyonelce yerine getirdi.",sw:"Execute",se:"He executed the plan flawlessly.",aw:"Abandon",ae:"They abandoned the project midway."},
+{id:154,tp:"pattern",w:"Come across",tr:"Rastlamak",c:"#f97316",e:"I came across an old friend at the market.",t:"Markette eski bir arkadasima rastladim.",e2:"You may come across unfamiliar words in exams.",t2:"Sinavlarda tan\u0131mad\u0131g\u0131n kelimelerle karsilasabilirsin.",sw:"Encounter",se:"He encountered a rare bird in the forest.",aw:"Seek",ae:"She actively sought out new opportunities."},
+{id:155,tp:"pattern",w:"As long as",tr:"Oldugu surece",c:"#6366f1",e:"As long as you work hard you will succeed.",t:"Siki cal\u0131st\u0131g\u0131n surece basarili olacaksin.",e2:"I will always help you as long as you need me.",t2:"Ihtiyac duydugun surece her zaman yardim edecegim.",sw:"Provided that",se:"Provided that you study you will pass.",aw:"Unless",ae:"Unless you try you will never know."},
+{id:156,tp:"pattern",w:"In spite of",tr:"Ragmen/Karsin",c:"#a855f7",e:"In spite of the heavy rain we still enjoyed the trip.",t:"Siddetli yagmura ragmen geziden hala keyif aldik.",e2:"She succeeded in spite of many serious obstacles.",t2:"Pek cok ciddi engele ragmen basardi.",sw:"Despite",se:"Despite the cold she went for a run.",aw:"Because of",ae:"Because of the storm the game was cancelled."},
+{id:157,tp:"pattern",w:"According to",tr:"Gore",c:"#3b82f6",e:"According to the latest report sales have increased.",t:"En son rapora gore satislar ardi.",e2:"According to experts sleep is crucial for health.",t2:"Uzmanlara gore uyku saglik icin hayati onem tasiyor.",sw:"Based on",se:"Based on the data the trend is clear.",aw:"Contrary to",ae:"Contrary to expectations it failed."},
+{id:158,tp:"pattern",w:"Make a difference",tr:"Fark yaratmak",c:"#10b981",e:"Even the smallest actions can make a big difference.",t:"En kucuk eylemler bile buyuk fark yaratabilir.",e2:"Your honest feedback really makes a difference.",t2:"Geri bildiriminiz gercekten fark yaratiyor.",sw:"Matter",se:"Your effort truly matters here.",aw:"Have no effect",ae:"His complaints had no effect whatsoever."},
+{id:159,tp:"pattern",w:"Give up on",tr:"Vazgecmek",c:"#ef4444",e:"Never give up on your most important dreams.",t:"En onemli hayallerinden asla vazgecme.",e2:"Do not give up on this difficult job. It gets easier.",t2:"Bu zor isten vazgecme. Kolaylasiyor.",sw:"Abandon",se:"She abandoned her plans at the last moment.",aw:"Persist",ae:"He persisted despite all the setbacks."},
+{id:160,tp:"pattern",w:"Turn out",tr:"Sonuclanmak",c:"#a855f7",e:"It turned out to be an excellent decision.",t:"Mukemmel bir karar oldugu ortaya cikti.",e2:"In the end everything turned out very well.",t2:"Sonunda her sey cok iyi sonuclandi.",sw:"Result",se:"The experiment resulted in a breakthrough.",aw:"Fail",ae:"The whole plan failed unexpectedly."},
+{id:161,tp:"pattern",w:"End up",tr:"Sonunda olmak",c:"#f97316",e:"If you do not study you will end up failing.",t:"Calismass\u0131n sonunda basar\u0131s\u0131z olursun.",e2:"We ended up staying for three whole days.",t2:"Sonunda tam uc gun kaldik.",sw:"Finish",se:"She finished working at midnight.",aw:"Start",ae:"He started fresh with a new approach."},
+{id:162,tp:"pattern",w:"Figure out",tr:"Cozmek/Anlamak",c:"#3b82f6",e:"I still cannot figure out how this works.",t:"Bunun nasil cal\u0131st\u0131g\u0131n\u0131 hala cozemiyorum.",e2:"She figured out the correct answer on her own.",t2:"Dogru cevabi kendi basina cozdu.",sw:"Solve",se:"He solved the complex equation easily.",aw:"Confuse",ae:"The instructions confused everyone completely."},
+{id:163,tp:"pattern",w:"Bring up",tr:"Yetistirmek/Gundeme getirmek",c:"#8b5cf6",e:"She was brought up by her loving grandparents.",t:"Sevgi dolu buyukanne ve buyukbabasi tarafindan yetistirildi.",e2:"Please do not bring up politics at the dinner table.",t2:"Yemek masasinda politika konusunu gundeme getirme lutfen.",sw:"Raise",se:"He raised an important point in the meeting.",aw:"Drop",ae:"She dropped the subject immediately."},
+{id:164,tp:"pattern",w:"Carry on",tr:"Devam etmek",c:"#10b981",e:"Carry on. Do not let this setback stop you.",t:"Devam et. Bu geri ad\u0131min seni durdurmas\u0131na izin verme.",e2:"Please carry on with exactly what you were doing.",t2:"Lutfen yapt\u0131g\u0131n\u0131z seye tam olarak devam edin.",sw:"Continue",se:"She continued working despite the obstacles.",aw:"Quit",ae:"He quit the moment things got hard."},
+{id:165,tp:"pattern",w:"Give in",tr:"Boyun egmek",c:"#ef4444",e:"Do not give in to peer pressure.",t:"Arkadas baskis\u0131na boyun egme.",e2:"She eventually gave in and agreed to the terms.",t2:"Sonunda boyun egdi ve kosullari kabul etti.",sw:"Yield",se:"He yielded to their demands after hours.",aw:"Resist",ae:"She resisted all attempts to change her mind."},
+{id:166,tp:"pattern",w:"Cut down on",tr:"Azaltmak/Kismak",c:"#14b8a6",e:"You seriously need to cut down on sugar.",t:"Sekeri gercekten azaltman gerekiyor.",e2:"We need to cut down on all unnecessary spending.",t2:"Tum gereksiz harcamalarimizi kismamiz gerekiyor.",sw:"Reduce",se:"She reduced her working hours significantly.",aw:"Increase",ae:"He increased his consumption of vegetables."},
+{id:167,tp:"pattern",w:"Take on",tr:"Ustlenmek/Ise almak",c:"#6366f1",e:"She took on far too much responsibility at once.",t:"Bir anda cok fazla sorumluluk ustlendi.",e2:"The company decided to take on new staff.",t2:"Sirket yeni personel almaya karar verdi.",sw:"Assume",se:"He assumed full control of the project.",aw:"Relinquish",ae:"She relinquished control after the crisis."},
+{id:168,tp:"pattern",w:"Stand out",tr:"One cikmak/Goze carpmak",c:"#a855f7",e:"Her outstanding performance really stood out.",t:"Olaganustu performansi gercekten one cikti.",e2:"He stands out in absolutely any crowd.",t2:"Herhangi bir kalabalikta kesinlikle goze carpar.",sw:"Excel",se:"She excelled in every subject at school.",aw:"Blend in",ae:"He tried to blend in with the crowd."},
+{id:169,tp:"pattern",w:"Get over",tr:"Atlatmak/Ustesinden gelmek",c:"#10b981",e:"It took several months to get over the illness.",t:"Hastaligi atlatmak birka\u00e7 ay aldi.",e2:"Get over it. Life has to go on.",t2:"Atla bunu. Hayat devam etmek zorunda.",sw:"Recover",se:"She recovered slowly from the shock.",aw:"Dwell on",ae:"He kept dwelling on the past failure."},
+{id:170,tp:"pattern",w:"Rely on",tr:"Guvenmek/Bel baglamak",c:"#3b82f6",e:"You can always completely rely on me.",t:"Her zaman tamamen bana guvenebilirsin.",e2:"Do not rely entirely on luck for your success.",t2:"Basarin icin tamamen sansa bel baglamayin.",sw:"Depend on",se:"We depend on each other completely.",aw:"Distrust",ae:"She distrusted everyone around her."},
+{id:171,tp:"pattern",w:"Be in charge of",tr:"Sorumlu olmak/Yonetmek",c:"#6366f1",e:"Who is currently in charge of this whole department?",t:"Su an bu departmanin tamaminin basinda kim var?",e2:"She is fully in charge of the entire project.",t2:"Projenin tamam\u0131ndan tam olarak sorumludur.",sw:"Responsible for",se:"He is responsible for all daily operations.",aw:"Subordinate",ae:"As a subordinate he followed orders."},
+{id:172,tp:"pattern",w:"Keep track of",tr:"Takip etmek/Kayit tutmak",c:"#14b8a6",e:"It is hard to keep track of all your daily expenses.",t:"Tum gunluk harcamalarini takip etmek zor.",e2:"Keep careful track of your weekly progress.",t2:"Haftalik ilerlemenizi dikkatli sekilde kayit altina alin.",sw:"Monitor",se:"She monitored the situation closely.",aw:"Lose track",ae:"He lost track of all the changes."},
+{id:173,tp:"pattern",w:"Make sense of",tr:"Anlamlandirmak",c:"#f97316",e:"I simply cannot make sense of what he is saying.",t:"Soylediklerini bir turlu anlamland\u0131ram\u0131yorum.",e2:"It took a lot of time to make sense of the data.",t2:"Veriyi anlamlandirmak cok zaman aldi.",sw:"Understand",se:"She finally understood the complex theory.",aw:"Misunderstand",ae:"He completely misunderstood the instructions."},
+{id:174,tp:"pattern",w:"Be aware of",tr:"Farkinda olmak",c:"#14b8a6",e:"Always be fully aware of all your surroundings.",t:"Her zaman cevrenizin tamamen farkinda olun.",e2:"Are you truly aware of all the consequences?",t2:"Tum sonuclarin gercekten farkinda misin?",sw:"Conscious of",se:"She was conscious of every small detail.",aw:"Unaware",ae:"He was completely unaware of the risk."},
+{id:175,tp:"pattern",w:"Take care of",tr:"Bakmak/Ilgilenmek",c:"#ec4899",e:"She lovingly takes care of her elderly parents.",t:"Yasli anne babasina sevgiyle bakiyor.",e2:"I will personally take care of the arrangements.",t2:"Duzenlemeleri sahsen ben hallederim.",sw:"Look after",se:"He looked after his sick sister for weeks.",aw:"Neglect",ae:"She neglected her responsibilities entirely."},
+{id:176,tp:"pattern",w:"Put off",tr:"Ertelemek/Caydirmak",c:"#8b5cf6",e:"Never put off what you can easily do today.",t:"Bugun kolayca yapabildigini asla erteleme.",e2:"The bad weather put me off going outside.",t2:"Kotu hava disari cikmaktan vazgecirdi beni.",sw:"Postpone",se:"She postponed the meeting until next week.",aw:"Proceed",ae:"He proceeded with the plan immediately."},
+{id:177,tp:"pattern",w:"Keep an eye on",tr:"Gozetmek/Izlemek",c:"#3b82f6",e:"Keep an eye on the children while I am cooking.",t:"Ben yemek yaparken cocuklari gozet.",e2:"Could you keep an eye on my bag for a moment?",t2:"Bir dakika cantama goz kulak olur musun?",sw:"Watch over",se:"She watched over the sleeping baby.",aw:"Ignore",ae:"He ignored the warning signs completely."},
+{id:178,tp:"pattern",w:"Give rise to",tr:"Neden olmak",c:"#10b981",e:"Poverty gives rise to many serious social problems.",t:"Yoksulluk pek cok ciddi toplumsal soruna neden olur.",e2:"The new policy gave rise to widespread protests.",t2:"Yeni politika yaygin protestolara yol acti.",sw:"Lead to",se:"Poor planning led to major delays.",aw:"Prevent",ae:"The law prevented further violations."},
+{id:179,tp:"pattern",w:"Make the most of",tr:"En iyi sekilde degerlendirmek",c:"#f59e0b",e:"Make the most of every single opportunity you get.",t:"Elde ettigin her firsati en iyi sekilde degerlendir.",e2:"She made the most of her entire time abroad.",t2:"Yurt disindaki tum zamanini en iyi sekilde degerlendirdi.",sw:"Utilise",se:"He utilised every resource available to him.",aw:"Waste",ae:"She wasted a great opportunity again."},
+{id:180,tp:"pattern",w:"Come to terms with",tr:"Kabullenmek/Barismak",c:"#8b5cf6",e:"It took a long time to come to terms with the loss.",t:"Kaybi kabullenm cok zaman aldi.",e2:"She finally came to terms with her difficult past.",t2:"Sonunda zor gecmisiyle baristi.",sw:"Accept",se:"He accepted the situation and moved forward.",aw:"Resist",ae:"She resisted the truth for a long time."},
+{id:181,tp:"pattern",w:"Be prone to",tr:"Egilimli olmak",c:"#f97316",e:"Children are prone to catching colds in winter.",t:"Cocuklar k\u0131\u015f\u0131n soguk alginligina egilimli.",e2:"She is prone to making impulsive decisions.",t2:"Anl\u0131k kararlar almaya egilimli.",sw:"Likely to",se:"He is likely to make mistakes under stress.",aw:"Resistant to",ae:"She is resistant to peer pressure."},
+{id:182,tp:"pattern",w:"Draw attention to",tr:"Dikkat cekmek",c:"#a855f7",e:"I want to draw your attention to a key issue.",t:"Dikkatinizi onemli bir konuya cekmek istiyorum.",e2:"The report draws attention to rising inequality.",t2:"Rapor artan esitsizlige dikkat cekiyor.",sw:"Highlight",se:"She highlighted the most important findings.",aw:"Divert",ae:"He tried to divert attention from the problem."},
+{id:183,tp:"pattern",w:"Make an effort",tr:"Caba gostermek",c:"#10b981",e:"You need to make much more of an effort.",t:"Cok daha fazla caba gostermen gerekiyor.",e2:"She made a huge effort to arrive on time.",t2:"Zamaninda ulasmak icin buyuk caba gosterdi.",sw:"Try hard",se:"He tried hard to impress the interviewer.",aw:"Give up",ae:"She gave up before even trying."},
+{id:184,tp:"pattern",w:"Turn down",tr:"Reddetmek/Kismak",c:"#ef4444",e:"She politely turned down the job offer.",t:"Is teklifini kibarca reddetti.",e2:"Could you please turn down the music?",t2:"Muzigi kisar misin lutfen?",sw:"Reject",se:"He rejected every offer that came.",aw:"Accept",ae:"She accepted the challenge with enthusiasm."},
+{id:185,tp:"pattern",w:"Work out",tr:"Egzersiz/Cozmek/Sonuclanmak",c:"#10b981",e:"Fortunately everything worked out well in the end.",t:"Neyse ki sonunda her sey iyi sonuclandi.",e2:"I work out at the gym three times every week.",t2:"Haftada uc kez spor salonunda egzersiz yapiyorum.",sw:"Exercise",se:"She exercises every morning before work.",aw:"Give up",ae:"He gave up training after the injury."},
+{id:186,tp:"pattern",w:"Catch up with",tr:"Yetismek/Haberles mek",c:"#8b5cf6",e:"I urgently need to catch up with my studies.",t:"Derslerime acilen yetismem gerekiyor.",e2:"We should catch up soon. It has been ages.",t2:"Yakinda bulu\u015fmal\u0131y\u0131z. Cok oldu.",sw:"Reach",se:"She reached her friend after a long search.",aw:"Fall behind",ae:"He fell behind and could not recover."},
+{id:187,tp:"pattern",w:"Give sb a hand",tr:"Yardim etmek",c:"#10b981",e:"Can you give me a hand with these heavy boxes?",t:"Bu ag\u0131r kutularla bana yardim edebilir misin?",e2:"She gave me a hand when I needed it the most.",t2:"En cok ihtiyac duydu\u011fumda bana yard\u0131m etti.",sw:"Assist",se:"He assisted the elderly woman across the road.",aw:"Hinder",ae:"His interference only hindered the process."},
+{id:188,tp:"pattern",w:"Stand by",tr:"Yaninda olmak/Desteklemek",c:"#10b981",e:"I will always stand by you no matter what happens.",t:"Ne olursa olsun her zaman yaninda olacagim.",e2:"Please stand by. We will be with you shortly.",t2:"Lutfen bekleyin. Kisa sure icinde sizinle olacagiz.",sw:"Support",se:"She supported him throughout the trial.",aw:"Abandon",ae:"He abandoned his friends when they needed him."},
+{id:189,tp:"pattern",w:"Break into",tr:"Zorla girmek",c:"#ef4444",e:"Someone broke into our house last night.",t:"Dun gece birileri evimize girdi.",e2:"She suddenly broke into a wide smile.",t2:"Aniden genis bir gul\u00fcmsemeye burundu.",sw:"Intrude",se:"He intruded on their private conversation.",aw:"Leave",ae:"She left the premises immediately."},
+{id:190,tp:"pattern",w:"Get rid of",tr:"Kurtulmak/Elden cikarmak",c:"#f97316",e:"I really need to get rid of all this old stuff.",t:"Tum bu eski seylerden gercekten kurtulmam gerekiyor.",e2:"She finally got rid of her terrible bad habits.",t2:"Sonunda korkunc kotu aliskanliklarindan kurtuldu.",sw:"Discard",se:"He discarded everything he no longer needed.",aw:"Keep",ae:"She kept every letter he ever sent her."},
+{id:191,tp:"pattern",w:"Make up ones mind",tr:"Karar vermek",c:"#6366f1",e:"Have you finally made up your mind yet?",t:"Nihayet karar verdin mi?",e2:"She made up her mind to leave the company.",t2:"Sirketten ayr\u0131lmaya karar verdi.",sw:"Decide",se:"He decided quickly and never looked back.",aw:"Hesitate",ae:"She hesitated for weeks before acting."},
+{id:192,tp:"pattern",w:"Face up to",tr:"Yuzlesmek/Kabullenmek",c:"#3b82f6",e:"You must face up to all your responsibilities.",t:"Sorumluluklarinla yuzlesmen gerekiyor.",e2:"It is finally time to face up to the truth.",t2:"Gercekle yuzlesme zamani nihayet geldi.",sw:"Confront",se:"She confronted her fears head on.",aw:"Deny",ae:"He denied the reality of the situation."},
+{id:193,tp:"pattern",w:"Look back on",tr:"Geri donup bakmak",c:"#6366f1",e:"When I look back on my childhood I feel happy.",t:"Cocukluguma geri baktigimda mutlu hissediyorum.",e2:"She looks back on those years with zero regret.",t2:"O yillara sifir pismanl\u0131kla bakiyor.",sw:"Reflect on",se:"He reflected on all the choices he made.",aw:"Look ahead",ae:"She looked ahead and planned for the future."},
+{id:194,tp:"pattern",w:"Settle down",tr:"Yerlesmek/Sakinlesmek",c:"#10b981",e:"They eventually settled down in the south of France.",t:"Sonunda Guney Fransaya yerlestiler.",e2:"Settle down. The exam is about to begin.",t2:"Sakin olun. Sinav baslamak uzere.",sw:"Stabilise",se:"The situation stabilised after several days.",aw:"Uproot",ae:"The family was uprooted by the war."},
+{id:195,tp:"pattern",w:"Be up to",tr:"Yapmakta olmak",c:"#a855f7",e:"What exactly are you up to these days?",t:"Bu gunlerde tam olarak ne yapiyorsun?",e2:"It is completely up to you. You decide.",t2:"Bu tamamen senin kararin. Sen karar ver.",sw:"Responsible for",se:"She is responsible for the final decision.",aw:"Forced",ae:"He was forced into the decision by others."},
+{id:196,tp:"pattern",w:"Fill in",tr:"Doldurmak/Bilgilendirmek",c:"#3b82f6",e:"Please fill in the entire form completely.",t:"Lutfen formun tamamini eksiksiz doldurun.",e2:"Can you fill me in on what I missed?",t2:"Kacirdiklari hakkinda beni bilgilendirir misin?",sw:"Complete",se:"Please complete all the required fields.",aw:"Leave blank",ae:"Never leave any fields blank on a form."},
+{id:197,tp:"pattern",w:"Pick up",tr:"Almak/Ogrenmek/Iyilesmek",c:"#10b981",e:"She picked up French remarkably quickly.",t:"Frans\u0131zcay\u0131 inanilmaz hizla ogrendi.",e2:"Business has picked up greatly since last month.",t2:"Is gecen aydan bu yana buyuk olcude iyilesti.",sw:"Learn",se:"He learned the skill in just two weeks.",aw:"Forget",ae:"She forgot everything she had learned."},
+{id:198,tp:"pattern",w:"Put forward",tr:"One surmek/Teklif etmek",c:"#8b5cf6",e:"She put forward a truly interesting proposal.",t:"Gercekten ilginc bir oneri one surdu.",e2:"Several new ideas were put forward at the meeting.",t2:"Toplantida cesitli yeni fikirler ileri suruldu.",sw:"Propose",se:"He proposed a completely new approach.",aw:"Withdraw",ae:"She withdrew her proposal after the debate."},
+{id:199,tp:"pattern",w:"Account for",tr:"Aciklamak/Olusturmak",c:"#14b8a6",e:"How exactly do you account for this large expense?",t:"Bu buyuk harcamayi tam olarak nasil aciklars\u0131n\u0131z?",e2:"Tourism accounts for fifteen percent of the income.",t2:"Turizm gelirin yuzde on besini olusturuyor.",sw:"Explain",se:"She explained all the missing details.",aw:"Ignore",ae:"He ignored the financial discrepancies."},
+{id:200,tp:"pattern",w:"Live up to",tr:"Layik olmak",c:"#10b981",e:"The film did not live up to my high expectations.",t:"Film yuksek beklentilerimi karsilamadi.",e2:"She always lives up to every promise she makes.",t2:"Her zaman verdigi her sozun hakkini veriyor.",sw:"Meet",se:"He met every single target set for him.",aw:"Disappoint",ae:"The results disappointed everyone involved."},
+{id:201,tp:"pattern",w:"Call off",tr:"Iptal etmek",c:"#ef4444",e:"The important match was called off due to bad weather.",t:"Onemli mac kotu hava nedeniyle iptal edildi.",e2:"She called off the engagement at the very last minute.",t2:"Son dakikada nisani bozdu.",sw:"Cancel",se:"They cancelled the event due to low attendance.",aw:"Proceed",ae:"Despite the rain they proceeded with the plan."},
+{id:202,tp:"pattern",w:"Cut off",tr:"Kesmek/Koparmak",c:"#ef4444",e:"The village was completely cut off by heavy snow.",t:"Koy yogun kar nedeniyle dis dunyadan koptu.",e2:"He was cut off completely in the middle of his sentence.",t2:"Cumlesinin tam ortasinda sozu kesildi.",sw:"Isolate",se:"The storm isolated the coastal villages.",aw:"Connect",ae:"The new bridge connected the two communities."},
+{id:203,tp:"pattern",w:"Jump to conclusions",tr:"Aceyle sonuca varmak",c:"#ef4444",e:"Do not jump to conclusions without all the facts.",t:"Tum gercekleri bilmeden aceyle sonuca varma.",e2:"She jumped to conclusions and wrongly accused him.",t2:"Aceyle sonuca varip onu haksiz yere sucladi.",sw:"Assume",se:"Never assume without checking the facts first.",aw:"Investigate",ae:"She investigated thoroughly before concluding."},
+{id:204,tp:"pattern",w:"Boil down to",tr:"Ozunde olmak",c:"#8b5cf6",e:"It all ultimately boils down to one simple fact.",t:"Hepsi nihayetinde tek bir basit gercege dayaniyor.",e2:"The problem boils down to a lack of communication.",t2:"Sorun ozunde iletisim eksikliginden kaynaklan\u0131yor.",sw:"Come down to",se:"It comes down to how hard you work.",aw:"Complicate",ae:"He complicated what was a simple matter."},
+{id:205,tp:"pattern",w:"Be subject to",tr:"Tabi olmak",c:"#6366f1",e:"All employees are subject to the companys strict rules.",t:"Tum calisanlar sirketin kati kurallarina tabidir.",e2:"Prices are subject to change without prior notice.",t2:"Fiyatlar onceden haber verilmeksizin degisebilir.",sw:"Liable to",se:"She is liable to make errors under stress.",aw:"Exempt from",ae:"Students are exempt from this particular fee."},
+{id:206,tp:"pattern",w:"Look up",tr:"Aramak/Iyiye gitmek",c:"#3b82f6",e:"Look up the unfamiliar word in a good dictionary.",t:"Tanimad\u0131\u011f\u0131n kelimeyi iyi bir sozlukte ara.",e2:"Things are finally looking up for her career.",t2:"Sonunda kariyeri icin isler iyiye gidiyor.",sw:"Search",se:"She searched for the information online.",aw:"Overlook",ae:"He overlooked the most important detail."},
+{id:207,tp:"pattern",w:"Come between",tr:"Araya girmek",c:"#ef4444",e:"Nothing in the world can come between true friends.",t:"Dunyadaki hicbir sey gercek arkadaslarin arasina giremez.",e2:"Do not let money come between you and your family.",t2:"Paranin seni ailen ile aranda ba\u011fi bozmasina izin verme.",sw:"Interfere",se:"He interfered in their relationship unnecessarily.",aw:"Unite",ae:"The crisis united the whole community."},
+{id:208,tp:"pattern",w:"Hold back",tr:"Geri tutmak/Kendini tutmak",c:"#8b5cf6",e:"Do not hold back. Say exactly what you truly think.",t:"Kendini tutma. Gercekten ne dusundugunu tam olarak soyle.",e2:"Fear was holding him back from trying new things.",t2:"Korku yeni seyler denemesini engelliyordu.",sw:"Restrain",se:"She restrained herself from reacting.",aw:"Release",ae:"He released all his pent-up emotions."},
+{id:209,tp:"pattern",w:"Be cut out for",tr:"Yaratilmis olmak",c:"#8b5cf6",e:"I honestly do not think I am cut out for this job.",t:"Bu is icin yaratilmadigimi gercekten dusunuyorum.",e2:"She is perfectly cut out for a legal career.",t2:"Hukuk kariyeri icin mukemmel biciimde yaratilmis.",sw:"Suited",se:"He is perfectly suited for the leadership role.",aw:"Unsuitable",ae:"She felt completely unsuitable for the position."},
+{id:210,tp:"pattern",w:"Bring out",tr:"Ortaya cikarmak",c:"#a855f7",e:"Difficult times always bring out the best in people.",t:"Zor zamanlar her zaman insanlarin en iyisini ortaya cikarir.",e2:"The company brought out a brand new product line.",t2:"Sirket tamamen yeni bir urun serisi piyasaya surdu.",sw:"Reveal",se:"The crisis revealed his true character.",aw:"Suppress",ae:"She suppressed her emotions at work."},
+{id:211,tp:"pattern",w:"Set aside",tr:"Bir kenara birakmak",c:"#8b5cf6",e:"Set aside some dedicated time each day for reading.",t:"Her gun okumak icin biraz ozel zaman ayir.",e2:"Let us set aside our differences for now.",t2:"Simdilik farkl\u0131l\u0131klar\u0131m\u0131z\u0131 bir kenara birakalim.",sw:"Reserve",se:"She reserved an hour each morning for exercise.",aw:"Use up",ae:"He used up all his savings immediately."},
+{id:212,tp:"pattern",w:"Look up to",tr:"Hayranlik duymak",c:"#a855f7",e:"She always looks up to her brilliant older sister.",t:"Her zaman parlak ablas\u0131na hayranlik duyar.",e2:"I look up to people who never give up.",t2:"Asla vazgecmeyen insanlara hayranlik duyuyorum.",sw:"Admire",se:"He admired her dedication to her work.",aw:"Look down on",ae:"She looked down on people with less experience."},
+{id:213,tp:"pattern",w:"Run into",tr:"Rastlamak/Sorunla karsilashmak",c:"#ef4444",e:"I ran into my old teacher at the supermarket.",t:"Supermarkette eski ogretmenimle karsilastim.",e2:"We ran into some serious problems with the project.",t2:"Projede bazi ciddi sorunlarla karsilastik.",sw:"Encounter",se:"She encountered many obstacles along the way.",aw:"Avoid",ae:"He carefully avoided any confrontation."},
+{id:214,tp:"pattern",w:"Put across",tr:"Anlatmak/Ifade etmek",c:"#6366f1",e:"She struggled greatly to put her ideas across clearly.",t:"Fikirlerini ac\u0131kca aktarmakta buyuk zorland\u0131.",e2:"Good teachers put complex ideas across simply.",t2:"Iyi ogretmenler karmasik fikirleri sade biciimde aktarir.",sw:"Communicate",se:"He communicated his vision clearly.",aw:"Confuse",ae:"His explanation only confused people more."},
+{id:215,tp:"pattern",w:"Be supposed to",tr:"Yapmasi gerekmek",c:"#6366f1",e:"You were supposed to call me yesterday.",t:"Dun beni araman gerekiyordu.",e2:"The meeting is supposed to start at nine.",t2:"Toplant\u0131n\u0131n dokuzda baslamasi gerekiyor.",sw:"Expected to",se:"She is expected to arrive by noon.",aw:"Free to",ae:"You are free to leave whenever you wish."},
+{id:216,tp:"pattern",w:"Show off",tr:"Gosteris yapmak",c:"#f97316",e:"He is always showing off his brand new phone.",t:"Her zaman yeni telefonuyla gosteris yapiyor.",e2:"Stop showing off and just do your job well.",t2:"Gosteris yapmayi birak ve sadece isini iyi yap.",sw:"Brag",se:"She bragged about her achievements constantly.",aw:"Be humble",ae:"Despite his success he remained humble."},
+{id:217,tp:"pattern",w:"Take off",tr:"Havalanmak/Yukselise gecmek",c:"#3b82f6",e:"The plane took off exactly one hour late.",t:"Ucak tam bir saat gec havaland\u0131.",e2:"Her whole career really took off after the award.",t2:"Kariyerinin tamami odulden sonra gercekten yukselise gect\u0131.",sw:"Launch",se:"The rocket launched perfectly on schedule.",aw:"Land",ae:"The plane landed safely despite the storm."},
+{id:218,tp:"pattern",w:"Hold on",tr:"Beklemek/Tutunmak",c:"#f59e0b",e:"Hold on just a moment. I will be right back.",t:"Sadece bir dakika bekle. Hemen donecegim.",e2:"Hold on tight. The road ahead is very bumpy.",t2:"Siki tut. Onumuzdeki yol cok engebeli.",sw:"Wait",se:"Please wait. The doctor will see you soon.",aw:"Let go",ae:"She let go of her fear and moved forward."},
+{id:219,tp:"pattern",w:"Point to",tr:"Isaret etmek/Kanitlamak",c:"#3b82f6",e:"All the evidence clearly points to the same conclusion.",t:"Tum kanitlar ac\u0131kca ayni sonuca isaret ediyor.",e2:"She pointed to the emergency exit sign.",t2:"Acil cikis isaretini gosterdi.",sw:"Indicate",se:"The data indicates a clear upward trend.",aw:"Disprove",ae:"The evidence disproved the initial theory."},
+{id:220,tp:"pattern",w:"Look into",tr:"Incelemek/Arastirmak",c:"#a855f7",e:"The police are carefully looking into the matter.",t:"Polis konuyu dikkatle arastiriyor.",e2:"We need to look into this complaint very seriously.",t2:"Bu sikayeti cok ciddiye alip incelememiz gerekiyor.",sw:"Investigate",se:"She investigated every single lead.",aw:"Dismiss",ae:"He dismissed the complaint without reading it."},
+{id:221,tp:"pattern",w:"Depend on",tr:"Bagli olmak",c:"#f59e0b",e:"Your final salary depends on your overall performance.",t:"Nihai maas\u0131n genel performans\u0131na bagli.",e2:"It all entirely depends on the weather.",t2:"Her sey tamamen havaya bagli.",sw:"Rely on",se:"She relies completely on his judgment.",aw:"Independent of",ae:"The result is independent of external factors."},
+{id:222,tp:"pattern",w:"Give away",tr:"Vermek/Ifsha etmek",c:"#10b981",e:"Please do not give away the ending of the film.",t:"Filmin sonunu soylemeyin lutfen.",e2:"She generously gave away all her old books.",t2:"Eski kitaplarinin tamamini comertce dagiltti.",sw:"Reveal",se:"He accidentally revealed the surprise.",aw:"Conceal",ae:"She concealed the gift until the last moment."},
+{id:223,tp:"pattern",w:"Take turns",tr:"Sirasyla yapmak",c:"#14b8a6",e:"The children took turns reading aloud to the class.",t:"Cocuklar sinifa siras\u0131yla yuksek sesle okudu.",e2:"We take turns cooking dinner every evening.",t2:"Her aksam siras\u0131yla aksam yemegi pisiriyoruz.",sw:"Alternate",se:"They alternated between the two tasks.",aw:"Do alone",ae:"She preferred to do everything alone."},
+{id:224,tp:"pattern",w:"Watch out",tr:"Dikkat etmek",c:"#ef4444",e:"Watch out. The floor is dangerously slippery.",t:"Dikkat et. Zemin tehlikeli derecede kaygan.",e2:"You should watch out for pickpockets in that area.",t2:"O bolgede yankesicilere dikkat etmelisin.",sw:"Beware",se:"Beware of the dog. It can be aggressive.",aw:"Ignore",ae:"He ignored all the warning signs."},
+{id:225,tp:"pattern",w:"Stand out2",tr:"One cikmak2",c:"#a855f7",e:"Her outstanding work truly stood out from the rest.",t:"Olaganustu calismasi geri kalan\u0131ndan gercekten one cikti.",e2:"He naturally stands out in absolutely any crowd.",t2:"Herhangi bir kalabalikta dogal olarak goze carpar.",sw:"Excel",se:"She excelled in every aspect of her work.",aw:"Blend in",ae:"He preferred to blend in rather than stand out."},
+{id:226,tp:"pattern",w:"Be responsible for",tr:"Sorumlu olmak2",c:"#ef4444",e:"Who is ultimately responsible for this critical mistake?",t:"Bu kritik hatadan nihayetinde kim sorumlu?",e2:"She is solely responsible for managing the budget.",t2:"Butceyi yonetmekten yalnizca o sorumlu.",sw:"Accountable for",se:"He is accountable for every decision made.",aw:"Innocent of",ae:"She was innocent of any involvement."},
+{id:227,tp:"pattern",w:"Make a point of",tr:"Ozellikle yapmak",c:"#10b981",e:"He makes a point of calling his family every day.",t:"Her gun ailesini aramay\u0131 kendine aliskanlik yapmis.",e2:"Make a point of arriving on time every day.",t2:"Her gun zamaninda gelmeyi aliskanlik haline getir.",sw:"Make it a habit",se:"She made it a habit to review notes daily.",aw:"Neglect",ae:"He neglected to follow up on the issue."},
+{id:228,tp:"pattern",w:"Not only but also2",tr:"Sadece degil ayni zamanda2",c:"#10b981",e:"Not only is she talented but she is also dedicated.",t:"Sadece yetenekli degil ayni zamanda son derece ozverili.",e2:"Not only did it rain but it also snowed heavily.",t2:"Sadece yagmur yagmadi ayni zamanda yogun kar da ya\u011fdi.",sw:"Additionally",se:"Additionally the costs have risen significantly.",aw:"Neither nor",ae:"Neither the plan nor the budget was approved."},
+{id:229,tp:"pattern",w:"Face up to2",tr:"Yuzlesmek/Kabullenmek2",c:"#3b82f6",e:"You need to face up to all your responsibilities.",t:"Sorumluluklarinla yuzlesmen gerekiyor.",e2:"It is high time to face up to the truth.",t2:"Gercekle yuzlesme vakti coktan geldi.",sw:"Confront",se:"She confronted the bully directly.",aw:"Avoid",ae:"He avoided confronting the difficult truth."},
+{id:230,tp:"pattern",w:"Save sb from",tr:"Birini kurtarmak",c:"#f59e0b",e:"He saved her from making a terrible costly mistake.",t:"Onu korkunc ve maliyetli bir hata yapmaktan kurtardi.",e2:"Wearing a seatbelt can save you from serious injury.",t2:"Emniyet kemeri takmak ciddi yaralanmalardan koruyabilir.",sw:"Protect",se:"She protected her children from harm.",aw:"Endanger",ae:"His recklessness endangered everyone around him."},
+{id:231,tp:"pattern",w:"Come up",tr:"Ortaya cikmak/Gundeme gelmek",c:"#f59e0b",e:"Something completely unexpected has come up today.",t:"Bugun tamamen beklenmedik bir sey ortaya cikti.",e2:"Your name actually came up in our conversation.",t2:"Adin aslinda konusmamizda gecti.",sw:"Arise",se:"A new issue arose during the meeting.",aw:"Disappear",ae:"The problem disappeared after the fix."},
+{id:232,tp:"pattern",w:"Put forward2",tr:"One surmek/Ileri surmek2",c:"#8b5cf6",e:"She put forward a genuinely interesting proposal.",t:"Gercekten ilginc bir oneri one surdu.",e2:"Several excellent ideas were put forward.",t2:"Cesitli mukemmel fikirler ileri suruldu.",sw:"Suggest",se:"He suggested a completely different approach.",aw:"Withdraw",ae:"She withdrew her proposal after objections."},
+{id:233,tp:"pattern",w:"Keep out of",tr:"Uzak tutmak/Karismamak",c:"#f97316",e:"Please keep all children out of this restricted area.",t:"Lutfen tum cocuklari bu kisitli bolgeden uzak tutun.",e2:"I always try to keep out of other peoples business.",t2:"Her zaman baskalarin isine kar\u0131\u015fmamaya calisiyorum.",sw:"Stay away from",se:"Stay away from unnecessary conflicts.",aw:"Get involved",ae:"She got involved to help resolve the conflict."},
+{id:234,tp:"pattern",w:"Allow sb to",tr:"Birine izin vermek",c:"#10b981",e:"The teacher allowed students to use dictionaries.",t:"Ogretmen ogrencilerin sozluk kullanmasina izin verdi.",e2:"This pass allows you access to the building.",t2:"Bu gecis kart\u0131 binaya erisminize izin veriyor.",sw:"Permit",se:"She permitted him to leave early.",aw:"Forbid",ae:"He forbade any discussion on the topic."},
+{id:235,tp:"pattern",w:"Be based on",tr:"Dayanmak/Dayali olmak",c:"#3b82f6",e:"The film is entirely based on a true story.",t:"Film tamamen gercek bir hikayeye dayanmaktadir.",e2:"Her opinion is firmly based on real experience.",t2:"Gorusu gercek deneyime saglam biciimde dayaniyor.",sw:"Founded on",se:"The theory is founded on solid evidence.",aw:"Contradicted by",ae:"The claim was contradicted by the facts."},
+{id:236,tp:"pattern",w:"Spread across",tr:"Yayilmak/Genislemek",c:"#14b8a6",e:"The news spread rapidly across the whole country.",t:"Haber ulkenin tamamina hizla yayildi.",e2:"The wildfire spread across the forest overnight.",t2:"Orman yangini gece boyunca ormanda yayildi.",sw:"Expand",se:"The company expanded across new markets.",aw:"Contain",ae:"They managed to contain the outbreak."},
+{id:237,tp:"pattern",w:"Turn into",tr:"Donusmek/Haline gelmek",c:"#8b5cf6",e:"The argument quickly turned into a major fight.",t:"Tartisma hizla buyuk bir kavgaya donustu.",e2:"She brilliantly turned her hobby into a business.",t2:"Hobisini zekice basarili bir ise donusturdu.",sw:"Become",se:"The small company became a global giant.",aw:"Remain",ae:"Things remained exactly the same."},
+{id:238,tp:"pattern",w:"Either or",tr:"Ya ya da",c:"#6366f1",e:"Either you apologise now or I am leaving forever.",t:"Ya simdi ozur dilersin ya da sonsuza kadar gidiyorum.",e2:"It is either now or never. Make your choice.",t2:"Ya simdi ya da hic. Secimini yap.",sw:"One or the other",se:"One or the other option must be chosen.",aw:"Both and",ae:"Both the plan and the backup were approved."},
+{id:239,tp:"pattern",w:"Make use of",tr:"Kullanmak/Yararlanmak",c:"#14b8a6",e:"Make full use of every available resource.",t:"Mevcut her kaynaktan tam olarak yararlanin.",e2:"She made brilliant use of her free time.",t2:"Bos zamanini mukemmel biciimde degerlendirdi.",sw:"Utilise",se:"He utilised every opportunity given to him.",aw:"Waste",ae:"She wasted her chance to learn."},
+{id:240,tp:"pattern",w:"Be made up of",tr:"Olusmak/Meydana gelmek",c:"#06b6d4",e:"The committee is made up of ten senior experts.",t:"Komite on kidemli uzmandan olusmaktad\u0131r.",e2:"Water is made up of hydrogen and oxygen.",t2:"Su hidrojen ve oksijenden olusur.",sw:"Consist of",se:"The team consists of people from six countries.",aw:"Lack",ae:"The project lacked a clear structure."},
+{id:241,tp:"pattern",w:"Stick to",tr:"Bagli kalmak",c:"#a855f7",e:"Stick firmly to your plan no matter what happens.",t:"Ne olursa olsun planina siki sikiya bagli kal.",e2:"She always sticks to every word she gives.",t2:"Verdigi her soze her zaman sadik kalir.",sw:"Adhere to",se:"He adhered to the rules strictly.",aw:"Deviate from",ae:"She deviated from the original plan."},
+{id:242,tp:"pattern",w:"Give sb a hand2",tr:"Yardim etmek2",c:"#10b981",e:"Can you give me a hand moving these heavy boxes?",t:"Bu agir kutulari ta\u015f\u0131mamda bana yard\u0131m edebilir misin?",e2:"She gave me a hand when I needed it most.",t2:"En cok ihtiyac duydu\u011fumda bana yardim etti.",sw:"Help out",se:"He helped out his neighbour without asking.",aw:"Hinder",ae:"His interference only hindered the team."},
+{id:243,tp:"pattern",w:"Differ from",tr:"Farkli olmak",c:"#f97316",e:"British English clearly differs from American English.",t:"Ingiliz Ingilizcesi Amerikan Ingilizce'sinden acikca farklidir.",e2:"Her opinion differs quite significantly from mine.",t2:"Onun gorusu benimkinden oldukca farkli.",sw:"Contrast with",se:"His style contrasts with the traditional approach.",aw:"Resemble",ae:"The two systems closely resemble each other."},
+{id:244,tp:"pattern",w:"As well as",tr:"Yani sira/Hem de",c:"#8b5cf6",e:"She speaks French as well as fluent English.",t:"Ingilizce yani sira akici Fransizca da konusuyor.",e2:"He is talented as well as incredibly hardworking.",t2:"Hem yetenekli hem de inanilmaz derecede cal\u0131\u015fkan.",sw:"In addition to",se:"In addition to English she studied German.",aw:"Instead of",ae:"She chose to rest instead of working."},
+{id:245,tp:"pattern",w:"Aim to",tr:"Amaclamak/Hedeflemek",c:"#14b8a6",e:"She aims to improve her score by ten points.",t:"Puanini on puan artirmayi hedefliyor.",e2:"This program aims to reduce youth unemployment.",t2:"Bu program genclerin issizligini azaltmayi amaclamaktadir.",sw:"Intend to",se:"He intends to finish by the end of the week.",aw:"Give up on",ae:"She gave up on her dream too early."},
+{id:246,tp:"pattern",w:"Catch up with2",tr:"Yetismek2",c:"#8b5cf6",e:"I really need to catch up with my coursework.",t:"Ders calismama gercekten yetismem gerekiyor.",e2:"We should catch up over coffee soon.",t2:"Yakinda kahve icerken bulu\u015fmal\u0131y\u0131z.",sw:"Keep up with",se:"It is hard to keep up with all the news.",aw:"Fall behind",ae:"He fell behind everyone in the class."},
+{id:247,tp:"pattern",w:"Get along with2",tr:"Iyi gecimek2",c:"#10b981",e:"She gets along brilliantly with all her colleagues.",t:"Tum meslektaslariyla mukemmel biciimde geciniyor.",e2:"It is essential to get along with your manager.",t2:"Yoneticinizle iyi gecinmek sartt\u0131r.",sw:"Bond with",se:"She bonded quickly with the new team members.",aw:"Clash with",ae:"He constantly clashed with his supervisor."},
+{id:248,tp:"pattern",w:"Put up with2",tr:"Katlanmak/Dayanmak2",c:"#6366f1",e:"I simply cannot put up with rudeness any longer.",t:"Kabali\u011fa art\u0131k bir turlu dayanamiyorum.",e2:"How long have you been putting up with this?",t2:"Buna ne zamand\u0131r katlan\u0131yorsun?",sw:"Endure",se:"She endured years of criticism silently.",aw:"Reject",ae:"He finally rejected the unfair treatment."},
+{id:249,tp:"pattern",w:"Be associated with",tr:"Iliskilendirilmek",c:"#14b8a6",e:"Smoking is strongly associated with lung cancer.",t:"Sigara icmek akciger kanseriyle guclu biciimde iliskilendirilmektedir.",e2:"The brand is closely associated with high quality.",t2:"Marka yuksek kaliteyle yakindan ozdeslestirilmistir.",sw:"Linked to",se:"Stress is linked to many health issues.",aw:"Unrelated to",ae:"The two events are completely unrelated."},
+{id:250,tp:"pattern",w:"On behalf of",tr:"Adina/Namina",c:"#3b82f6",e:"I am speaking entirely on behalf of the whole team.",t:"Tum ekip adina tamamen konusuyorum.",e2:"She signed the document on behalf of her director.",t2:"Direktoru adina belgeyi imzaladi.",sw:"In the name of",se:"He acted in the name of justice.",aw:"For oneself",ae:"She made the decision purely for herself."},
+{id:251,tp:"pattern",w:"Take advantage of",tr:"Yararlanmak/Firsat degerlendirmek",c:"#f97316",e:"Take full advantage of every opportunity you are given.",t:"Verilen her firsattan tam olarak yararlanin.",e2:"She took advantage of the special discount offered.",t2:"Sunulan ozel indirimden yararland\u0131.",sw:"Exploit",se:"He exploited every opportunity available.",aw:"Miss out on",ae:"She missed out on a great chance."},
+{id:252,tp:"pattern",w:"Be likely to",tr:"Muhtemelen",c:"#f59e0b",e:"She is very likely to pass the exam this time.",t:"Bu sefer sinavi gecmesi cok muhtemel.",e2:"It is highly likely to rain heavily tomorrow.",t2:"Yarin yogun yagmur yagmasi oldukca muhtemel.",sw:"Probable",se:"A positive outcome is probable given the data.",aw:"Unlikely to",ae:"He is unlikely to change his mind."},
+{id:253,tp:"pattern",w:"Be interested in",tr:"Ilgilenmek/Merak etmek",c:"#8b5cf6",e:"Are you genuinely interested in learning English?",t:"Ingilizce ogrenmekle gercekten ilgileniyor musun?",e2:"She has always been deeply interested in science.",t2:"Her zaman bilimle derin biciimde ilgilenmistir.",sw:"Keen on",se:"He is keen on photography as a hobby.",aw:"Indifferent to",ae:"She seemed indifferent to the outcome."},
+{id:254,tp:"pattern",w:"Be capable of",tr:"Yapabilmek/Yetenegi olmak",c:"#a855f7",e:"She is truly capable of achieving great things.",t:"Gercekten buyuk seyler basarabilir.",e2:"Is he actually capable of managing the whole team?",t2:"Tum ekibi gercekten yonetebilir mi?",sw:"Able to",se:"She is able to handle pressure well.",aw:"Incapable of",ae:"He felt incapable of making the decision."},
+{id:255,tp:"pattern",w:"Be concerned about",tr:"Endishelenmek",c:"#ef4444",e:"She is very concerned about her declining health.",t:"K\u00f6t\u00fcle\u015fen sagligiyla ilgili cok endisheleniyor.",e2:"Are you concerned about the final results?",t2:"Nihai sonuclar hakkinda endisheleniyor musun?",sw:"Worried about",se:"He is worried about the future of the project.",aw:"Confident about",ae:"She is confident about the positive outcome."},
+{id:256,tp:"pattern",w:"Be familiar with",tr:"Asina olmak/Bilmek",c:"#10b981",e:"Are you fully familiar with this complex topic?",t:"Bu karmasik konuya tamamen asina misiniz?",e2:"She is already familiar with the new software.",t2:"Yeni yazilima zaten asina.",sw:"Acquainted with",se:"He is well acquainted with the procedure.",aw:"Unfamiliar with",ae:"She was unfamiliar with the local customs."},
+{id:257,tp:"pattern",w:"Result from",tr:"Kaynaklanmak",c:"#ef4444",e:"Many accidents result from driver distraction.",t:"Pek cok kaza surucu dikkatsizliginden kaynaklanir.",e2:"Her success resulted from years of dedication.",t2:"Basarisi y\u0131llarca suren adanmisliktan ileri geldi.",sw:"Stem from",se:"The problem stems from poor communication.",aw:"Lead to",ae:"Good planning leads to better outcomes."},
+{id:258,tp:"pattern",w:"In terms of",tr:"Acisindan/Bakimindan",c:"#6366f1",e:"In terms of price this is definitely the best option.",t:"Fiyat acisindan bu kesinlikle en iyi secenek.",e2:"In terms of quality this product is unmatched.",t2:"Kalite acisindan bu urunun esi yok.",sw:"Regarding",se:"Regarding the budget we need to review it.",aw:"Apart from",ae:"Apart from the cost everything is fine."},
+{id:259,tp:"pattern",w:"In addition to",tr:"Ek olarak/Bunun yanisira",c:"#10b981",e:"In addition to English she speaks three other languages.",t:"Ingilizceye ek olarak uc daha konusuyor.",e2:"In addition to the salary there are great benefits.",t2:"Maasa ek olarak harika yan haklar da var.",sw:"Besides",se:"Besides English he knows two more languages.",aw:"Instead of",ae:"Instead of adding more they cut the budget."},
+{id:260,tp:"pattern",w:"As a result of",tr:"Sonucunda/Nedeniyle",c:"#ef4444",e:"As a result of the storm all roads were closed.",t:"Firtina sonucunda tum yollar kapandi.",e2:"She succeeded as a direct result of hard work.",t2:"Dogrudan siki calismanin sonucunda basarili oldu.",sw:"Due to",se:"Due to the delay we missed our flight.",aw:"Despite",ae:"Despite the delay they arrived on time."},
+{id:261,tp:"pattern",w:"Take part in",tr:"Katilmak/Yer almak",c:"#3b82f6",e:"Everyone should actively take part in the discussion.",t:"Herkes tartismaya aktif olarak katilmalidir.",e2:"She took part in an international science competition.",t2:"Uluslararas\u0131 bir bilim yarismasina katildi.",sw:"Participate in",se:"He participated in the community project.",aw:"Withdraw from",ae:"She withdrew from the competition."},
+{id:262,tp:"pattern",w:"Consist of",tr:"Olusmak/Meydana gelmek",c:"#14b8a6",e:"The team consists of five highly experienced members.",t:"Ekip bes son derece deneyimli uyeden olusmaktadir.",e2:"The exam consists of three separate parts.",t2:"Sinav uc ayri bolumden olusmaktadir.",sw:"Comprise",se:"The course comprises six intensive modules.",aw:"Lack",ae:"The plan lacks the most critical elements."},
+{id:263,tp:"pattern",w:"Refer to",tr:"Atifta bulunmak/Belirtmek",c:"#6366f1",e:"Please refer to the full instructions carefully.",t:"Lutfen tam talimatlara dikkatle bakiniz.",e2:"He referred to the main report in his speech.",t2:"Konusmasinda ana rapora atifta bulundu.",sw:"Mention",se:"She mentioned the issue in passing.",aw:"Ignore",ae:"He completely ignored all previous reports."},
+{id:264,tp:"pattern",w:"Apply for",tr:"Basvurmak2",c:"#a855f7",e:"She successfully applied for a competitive scholarship.",t:"Rekabetci bir bursa basariyla basvurdu.",e2:"Have you applied for the new position yet?",t2:"Yeni pozisyon icin henuz basvurdunuz mu?",sw:"Submit an application",se:"He submitted his application on time.",aw:"Withdraw from",ae:"She withdrew from the process."},
+{id:265,tp:"pattern",w:"Bring about",tr:"Neden olmak/Yol acmak2",c:"#ef4444",e:"Technology has brought about enormous changes worldwide.",t:"Teknoloji dunya genelinde muazzam degisikliklere yol acmistir.",e2:"The new leadership brought about much-needed reform.",t2:"Yeni liderlik cok ihtiyac duyulan reformlara yol acti.",sw:"Cause",se:"The decision caused a major disruption.",aw:"Prevent",ae:"Early action prevented a major crisis."},
+{id:266,tp:"pattern",w:"Be related to",tr:"Ilgili olmak",c:"#3b82f6",e:"Stress is closely related to many health problems.",t:"Stres pek cok saglik sorunuyla yakindan ilgilidir.",e2:"Is this issue directly related to the previous one?",t2:"Bu mesele oncekiyle dogrudan baglantilidur?",sw:"Connected to",se:"The two crimes are clearly connected.",aw:"Unrelated to",ae:"The two incidents are completely unrelated."},
+{id:267,tp:"pattern",w:"Be made of",tr:"Yapilmis olmak",c:"#f97316",e:"This beautiful table is made of solid oak wood.",t:"Bu guzel masa masif mese agacindan yapilm\u0131s.",e2:"The bracelet is made of pure eighteen-carat gold.",t2:"Bileklik saf on sekiz ayar altindan yapilm\u0131s.",sw:"Constructed from",se:"The bridge was constructed from reinforced steel.",aw:"Synthetic",ae:"The cheap version is made of synthetic material."},
+{id:268,tp:"pattern",w:"Hold back2",tr:"Geri tutmak2",c:"#8b5cf6",e:"Do not hold back. Share everything you are thinking.",t:"Kendini tutma. Dusundugun her seyi paylas.",e2:"Her shyness held her back from great opportunities.",t2:"Utangacligi buyuk firsatlardan geri kalmasina neden oldu.",sw:"Restrain",se:"She restrained herself from saying too much.",aw:"Encourage",ae:"He encouraged her to speak up."},
+{id:269,tp:"pattern",w:"Get over2",tr:"Atlatmak/Iyilesmek2",c:"#10b981",e:"It took several months to fully get over the illness.",t:"Hastaligi tamamen atlatmak birka\u00e7 ay aldi.",e2:"You have to get over your fear of failing.",t2:"Basarisiz olma korkunu atlatmak zorundasin.",sw:"Recover from",se:"She recovered from the surgery quickly.",aw:"Succumb to",ae:"He succumbed to the illness eventually."},
+{id:270,tp:"pattern",w:"Settle down2",tr:"Yerlesmek/Sakinlesmek2",c:"#10b981",e:"They finally settled down in a small coastal town.",t:"Sonunda kucuk bir sahil kasabas\u0131na yerlestiler.",e2:"Settle down. The lesson is about to begin.",t2:"Sakin olun. Ders baslamak uzere.",sw:"Establish",se:"She established herself in her new city.",aw:"Move around",ae:"He kept moving around never settling."},
+{id:271,tp:"pattern",w:"Be up to2",tr:"Yapmakta olmak2",c:"#a855f7",e:"What have you been up to lately?",t:"Son zamanlarda ne yapiyorsun?",e2:"The final decision is entirely up to you.",t2:"Nihai karar tamamen sana bagli.",sw:"In charge of",se:"She is in charge of the final decision.",aw:"Out of control",ae:"The situation was out of everyones control."},
+{id:272,tp:"pattern",w:"Fill in2",tr:"Doldurmak/Bilgilendirmek2",c:"#3b82f6",e:"Please fill in the entire form completely and clearly.",t:"Lutfen formun tamamini eksiksiz ve acik biciimde doldurun.",e2:"Can you fill me in on what I missed?",t2:"Kacirdiklari hakkinda beni bilgilendirebilir misin?",sw:"Complete",se:"Please complete every field on the form.",aw:"Leave out",ae:"He left out the most important section."},
+{id:273,tp:"pattern",w:"Stand by2",tr:"Yaninda olmak/Hazir beklemek2",c:"#10b981",e:"I will always stand by you in the darkest times.",t:"En karanlik zamanlarda her zaman yaninda olacagim.",e2:"All units please stand by for further instructions.",t2:"Tum birimler lutfen ileri talimatlar icin hazirda bekleyin.",sw:"Support",se:"She supported him throughout the entire ordeal.",aw:"Abandon",ae:"He abandoned his team when they needed him."},
+{id:274,tp:"pattern",w:"Turn out2",tr:"Sonuclanmak2",c:"#a855f7",e:"It turned out to be a far better decision.",t:"Cok daha iyi bir karar oldugu ortaya cikti.",e2:"Hundreds turned out for the outdoor concert.",t2:"Acik hava konseri icin yuzlerce kisi geldi.",sw:"Result",se:"The experiment resulted in a breakthrough.",aw:"Fail",ae:"The whole strategy failed in the end."},
+{id:275,tp:"pattern",w:"End up2",tr:"Sonunda olmak2",c:"#f97316",e:"If you keep ignoring this you will end up regretting it.",t:"Bunu gormezden gelmeye devam edersen sonunda pi\u015fman olacaksin.",e2:"We ended up staying for four whole days.",t2:"Sonunda tam dort gun kaldik.",sw:"Wind up",se:"She wound up making the right decision.",aw:"Start out",ae:"He started out with nothing and succeeded."},
+{id:276,tp:"pattern",w:"Pick up2",tr:"Almak/Ogrenmek/Iyilesmek2",c:"#10b981",e:"She picked up Spanish remarkably quickly.",t:"Ispanyolcay\u0131 inanilmaz hizla ogrendi.",e2:"Business has picked up significantly since January.",t2:"Is Ocaktan bu yana onemli olcude iyilesti.",sw:"Acquire",se:"He acquired the skill through practice.",aw:"Lose",ae:"She lost the skill from lack of practice."},
+{id:277,tp:"pattern",w:"Cut down on2",tr:"Azaltmak/Kismak2",c:"#14b8a6",e:"You really should cut down on all that sugar.",t:"Gercekten tum o sekeri azaltmalisin.",e2:"The company had to cut down on all expenses.",t2:"Sirket tum giderleri kismak zorunda kaldi.",sw:"Reduce",se:"She reduced her screen time significantly.",aw:"Increase",ae:"He increased his daily exercise routine."},
+{id:278,tp:"pattern",w:"Look up to2",tr:"Hayranlik duymak2",c:"#a855f7",e:"She has always looked up to her mentor.",t:"Rehberine her zaman hayranlik duymustur.",e2:"Young athletes look up to successful professionals.",t2:"Genc sporcular basarili profesyonellere hayranlik duyar.",sw:"Admire",se:"Everyone admired her incredible dedication.",aw:"Despise",ae:"He despised anyone who gave up easily."},
+{id:279,tp:"pattern",w:"Give in2",tr:"Boyun egmek/Teslim olmak2",c:"#ef4444",e:"Please do not give in to any outside pressure.",t:"Lutfen hicbir dis baskiya boyun egme.",e2:"She eventually gave in and accepted the offer.",t2:"Sonunda boyun egdi ve teklifi kabul etti.",sw:"Surrender",se:"He surrendered to the inevitable outcome.",aw:"Persist",ae:"She persisted and finally got what she wanted."},
+{id:280,tp:"pattern",w:"Come up with2",tr:"Bulmak2",c:"#f59e0b",e:"He finally came up with a brilliant solution.",t:"Sonunda muhte\u015fem bir cozum buldu.",e2:"Can you come up with a completely new idea?",t2:"Tamamen yeni bir fikir bulabilir misin?",sw:"Devise",se:"She devised a plan that worked perfectly.",aw:"Fail to think of",ae:"He failed to think of any alternative."},
+{id:281,tp:"pattern",w:"Be prone to2",tr:"Egilimli olmak2",c:"#f97316",e:"He is particularly prone to making the same mistakes.",t:"Ozellikle ayni hatalari yapmaya egilimli.",e2:"Children are more prone to infections in winter.",t2:"Cocuklar k\u0131\u015f\u0131n enfeksiyonlara daha yatkin.",sw:"Susceptible to",se:"She is susceptible to stress-related illness.",aw:"Resistant to",ae:"He proved resistant to all external pressure."},
+{id:282,tp:"pattern",w:"Draw attention to2",tr:"Dikkat cekmek2",c:"#a855f7",e:"I want to draw your attention to a serious problem.",t:"Dikkatinizi ciddi bir soruna cekmek istiyorum.",e2:"The study draws attention to environmental risks.",t2:"Calisma cevre risklerine dikkat cekiyor.",sw:"Highlight",se:"She highlighted the key findings in her report.",aw:"Conceal",ae:"He tried to conceal the problem from management."},
+{id:283,tp:"pattern",w:"Break down2",tr:"Bozulmak/Cokmek2",c:"#8b5cf6",e:"My car broke down in the middle of nowhere.",t:"Arabam hic olmadik bir yerde bozuldu.",e2:"She broke down completely when she heard the news.",t2:"Haberi duyunca tamamen cokt\u00fc.",sw:"Malfunction",se:"The machine malfunctioned during operation.",aw:"Function well",ae:"Everything functioned perfectly on the day."},
+{id:284,tp:"pattern",w:"Take on2",tr:"Ustlenmek/Kabul etmek2",c:"#6366f1",e:"She agreed to take on the most challenging project.",t:"En zorlu projeyi ustlenmeyi kabul etti.",e2:"The company plans to take on fifty new employees.",t2:"Sirket elli yeni calisan almay\u0131 planliyor.",sw:"Undertake",se:"He undertook the mission without hesitation.",aw:"Reject",ae:"She rejected the extra responsibility."},
+{id:285,tp:"pattern",w:"Give up",tr:"Vazgecmek/Birakmak",c:"#ef4444",e:"Never ever give up on the things that matter most.",t:"En cok onem tas\u0131yan seylerden asla vazgecme.",e2:"She gave up smoking completely three years ago.",t2:"Uc yil once sigarayi tamamen birakti.",sw:"Quit",se:"He quit the race after the first lap.",aw:"Persist",ae:"She persisted and ultimately succeeded."},
+{id:286,tp:"pattern",w:"Work out2",tr:"Sonuclanmak/Egzersiz2",c:"#10b981",e:"Somehow everything worked out perfectly in the end.",t:"Bir sekilde sonunda her sey mukemmel biciimde sonuclandi.",e2:"I make it a point to work out every morning.",t2:"Her sabah egzersiz yapmayi kendime aliskanlik yaparim.",sw:"Resolve",se:"She resolved the issue before it escalated.",aw:"Fall apart",ae:"The plan fell apart at the last stage."},
+{id:287,tp:"pattern",w:"Make the most of2",tr:"En iyi sekilde degerlendirmek2",c:"#f59e0b",e:"Make the most of every opportunity that comes your way.",t:"Yolunuza cikan her firsati en iyi sekilde degerlendirin.",e2:"She made the most of her very limited time.",t2:"Son derece sinirli zamanini en iyi sekilde degerlendirdi.",sw:"Maximise",se:"She maximised every available resource.",aw:"Squander",ae:"He squandered every opportunity given to him."},
+{id:288,tp:"pattern",w:"Come to terms with2",tr:"Kabullenmek/Uzlasmak2",c:"#8b5cf6",e:"He finally came to terms with his difficult situation.",t:"Zor durumuyla nihayet yuzlesti.",e2:"Coming to terms with failure is part of growth.",t2:"Basarisizl\u0131kla yuzlesmek buyumenin bir parcasid\u0131r.",sw:"Accept",se:"She accepted the outcome gracefully.",aw:"Deny",ae:"He denied the reality for too long."},
+{id:289,tp:"pattern",w:"Take it for granted",tr:"Kiymetini bilmemek2",c:"#f59e0b",e:"Never take the kindness of others for granted.",t:"Baskalarin iyiliginin k\u0131ymetini asla bilmez olma.",e2:"We take our freedom for granted far too often.",t2:"Ozgurlugumuzun kiymetini cok sik bilmez oluyoruz.",sw:"Underappreciate",se:"He underappreciated everything she did.",aw:"Value",ae:"She truly valued every opportunity given to her."},
+{id:290,tp:"pattern",w:"Run into2",tr:"Rastlamak2",c:"#ef4444",e:"I unexpectedly ran into an old friend downtown.",t:"Sehir merkezinde beklenmedik sekilde eski bir arkadasima rastladim.",e2:"We ran into several unexpected problems.",t2:"Birka\u00e7 beklenmedik sorunla karsilastik.",sw:"Encounter",se:"She encountered many obstacles along the way.",aw:"Avoid",ae:"He avoided any potential confrontation."},
+{id:291,tp:"pattern",w:"Look back on2",tr:"Geri donup bakmak2",c:"#6366f1",e:"When I look back on that period I feel grateful.",t:"O doneme geri baktigimda minnettar hissediyorum.",e2:"She looks back on her childhood with great fondness.",t2:"Cocukluguna buyuk bir sevkle geri bakiyor.",sw:"Reflect on",se:"He reflected on all the lessons learned.",aw:"Look ahead",ae:"She always looked ahead to the future."},
+{id:292,tp:"pattern",w:"Be aware of2",tr:"Farkinda olmak2",c:"#14b8a6",e:"Always be fully aware of all your surroundings.",t:"Her zaman tum cevrenizin tamamen farkinda olun.",e2:"Are you fully aware of all the possible risks?",t2:"Tum olasi risklerin tam olarak farkinda misin?",sw:"Conscious of",se:"She was conscious of every small change.",aw:"Oblivious to",ae:"He was oblivious to the danger around him."},
+{id:293,tp:"pattern",w:"Make an effort2",tr:"Caba gostermek2",c:"#10b981",e:"You really need to make a greater effort.",t:"Gercekten daha buyuk caba gostermen gerekiyor.",e2:"She made an enormous effort to be punctual.",t2:"Dakik olmak icin muazzam caba gosterdi.",sw:"Try hard",se:"He tried hard to make a good impression.",aw:"Give up",ae:"She gave up without even trying properly."},
+{id:294,tp:"pattern",w:"Turn down2",tr:"Reddetmek/Azaltmak2",c:"#ef4444",e:"She politely turned down the job offer.",t:"Is teklifini kibarca reddetti.",e2:"Please turn down the volume on the television.",t2:"Lutfen televizyonun sesini kisin.",sw:"Decline",se:"He declined every offer that came his way.",aw:"Accept",ae:"She accepted the invitation with great pleasure."},
+{id:295,tp:"pattern",w:"Point out",tr:"Isaret etmek/Belirtmek",c:"#3b82f6",e:"She bravely pointed out the main error in the report.",t:"Rapordaki ana hatay\u0131 cesurca belirtti.",e2:"I want to point out a few important issues.",t2:"Birka\u00e7 onemli konuya dikkat cekmek istiyorum.",sw:"Highlight",se:"He highlighted all the key points clearly.",aw:"Overlook",ae:"She overlooked the most critical detail."},
+{id:296,tp:"pattern",w:"Not only but also3",tr:"Sadece degil ayni zamanda3",c:"#10b981",e:"Not only is she talented but she also works incredibly hard.",t:"Sadece yetenekli degil ayni zamanda inanilmaz calisiyor.",e2:"Not only did they fail but they also blamed others.",t2:"Sadece basarisiz olmad\u0131lar ayni zamanda baskalari sucladi.",sw:"Moreover",se:"Moreover the evidence was overwhelming.",aw:"Neither nor",ae:"Neither the plan nor the team was ready."},
+{id:297,tp:"pattern",w:"Rely on2",tr:"Guvenmek/Bel baglamak2",c:"#3b82f6",e:"You can always completely rely on my full support.",t:"Her zaman tam destegime tamamen guvenebilirsin.",e2:"Do not rely solely on luck for your success.",t2:"Basarin icin yalnizca sansa bel baglamayin.",sw:"Count on",se:"She could always count on her best friend.",aw:"Distrust",ae:"He distrusted everyone after the betrayal."},
+{id:298,tp:"pattern",w:"Account for2",tr:"Aciklamak/Olusmak2",c:"#14b8a6",e:"Can you fully account for this significant expense?",t:"Bu onemli harcamayi tamamen aciklayabilir misin?",e2:"Tourism accounts for a fifth of the national income.",t2:"Turizm milli gelirin beste birini olusturuyor.",sw:"Justify",se:"She justified every single cost in detail.",aw:"Ignore",ae:"He ignored all financial discrepancies."},
+{id:299,tp:"pattern",w:"Boil down to2",tr:"Ozunde olmak2",c:"#8b5cf6",e:"It all ultimately boils down to one core issue.",t:"Her sey nihayetinde tek bir temel meseleye dayaniyor.",e2:"The argument boils down to a difference of values.",t2:"Tartisma ozunde bir deger farklil\u0131\u011f\u0131na dayaniyor.",sw:"Come down to",se:"Success comes down to daily discipline.",aw:"Complicate",ae:"He unnecessarily complicated what was simple."},
+{id:300,tp:"pattern",w:"Come down to",tr:"Dayanmak/Temeli olmak",c:"#3b82f6",e:"At the end of the day it all comes down to trust.",t:"Gunun sonunda her sey guvene dayaniyor.",e2:"Success comes down to how consistently you work.",t2:"Basari ne kadar tutarli cal\u0131\u015ftigina dayaniyor.",sw:"Reduce to",se:"The problem reduces to a simple misunderstanding.",aw:"Complicate",ae:"She overcomplicated what was a simple decision."},
+];
+
+
+const KEY="wi_v5";
+let S=loadS(),cur=null,tab="study",flip=false,filt="all";
+function loadS(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch{}return{l:[],r:[],s:[],si:{},st:0,ld:null,dg:10,dc:0,dd:td(),dm:true};}
+function saveS(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch{}}
+function td(){return new Date().toISOString().split("T")[0];}
+function pd(){const d=new Date();d.setDate(d.getDate()-1);return d.toISOString().split("T")[0];}
+if(S.dd!==td()){if(S.ld!==pd())S.st=0;S.dd=td();S.dc=0;saveS();}
+
+function pool(){
+  const ls=new Set(S.l);
+  const avW=CARDS.filter(c=>!ls.has(c.id)&&c.tp==="word");
+  const avP=CARDS.filter(c=>!ls.has(c.id)&&c.tp==="pattern");
+  // Her iki grup da bitmisse tum kartlari don
+  if(!avW.length&&!avP.length)return CARDS;
+  // Gruplardan biri bitmisse digerini kullan
+  const srcW=avW.length?avW:CARDS.filter(c=>c.tp==="word");
+  const srcP=avP.length?avP:CARDS.filter(c=>c.tp==="pattern");
+  // Her gruptan esit sayida al, zorlananlari 2x ekle
+  const p=[];
+  for(const c of srcW){p.push(c);if(S.s.includes(c.id))p.push(c);}
+  for(const c of srcP){p.push(c);if(S.s.includes(c.id))p.push(c);}
+  return p;
+}
+
+function next(){
+  const p=pool();
+  // Kelime ve kaliplari ayir
+  const words=p.filter(c=>c.tp==="word");
+  const patterns=p.filter(c=>c.tp==="pattern");
+  // %50 ihtimalle kelime, %50 kalip sec (her ikisi de varsa)
+  let src=p;
+  if(words.length&&patterns.length){
+    src=Math.random()<0.5?words:patterns;
+  }
+  cur=src[Math.floor(Math.random()*src.length)];
+  flip=false;rStudy();
+}
+
+function markL(){anim(()=>{S.l=[...new Set([...S.l,cur.id])];S.r=S.r.filter(i=>i!==cur.id);S.s=S.s.filter(i=>i!==cur.id);S.dc++;S.st=S.ld===td()?S.st:(S.ld===pd()?S.st+1:1);S.ld=td();saveS();uh();next();});}
+function markR(){anim(()=>{S.r=[...new Set([...S.r,cur.id])];S.dc++;S.ld=td();saveS();uh();next();});}
+function markS(){anim(()=>{S.s=[...new Set([...S.s,cur.id])];const i=((S.si[cur.id]||0)+1)%2;S.si[cur.id]=i;S.dc++;S.ld=td();saveS();uh();next();});}
+
+function anim(fn){const w=document.getElementById("cw");if(w){w.classList.add("exit");setTimeout(fn,240);}else fn();}
+function uh(){document.getElementById("sc").textContent=S.st;document.getElementById("gdb").style.display=S.dc>=S.dg?"block":"none";}
+function st(t){tab=t;filt="all";document.querySelectorAll(".ni").forEach(e=>e.classList.remove("active"));document.getElementById("t-"+t).classList.add("active");render();}
+function render(){if(tab==="study")rStudy();else if(tab==="learned")rList("l");else if(tab==="review")rList("r");else if(tab==="struggling")rList("s");else if(tab==="stats")rStats();else if(tab==="settings")rSettings();}
+
+const PATTERN_EMOJI = {
+  131: "😤",
+  132: "💡",
+  133: "⚠️",
+  134: "😊",
+  135: "😞",
+  136: "🤝",
+  137: "😭",
+  138: "🤒",
+  139: "🕵️",
+  140: "💔",
+  141: "🔁",
+  142: "🌱",
+  143: "🕰️",
+  144: "🙈",
+  145: "🔄",
+  146: "🧮",
+  147: "➕",
+  148: "➡️",
+  149: "↗️",
+  150: "📅",
+  151: "🏃",
+  152: "🚶",
+  153: "✅",
+  154: "😲",
+  155: "⏰",
+  156: "⚡",
+  157: "📖",
+  158: "⭐",
+  159: "🏳️",
+  160: "🎭",
+  161: "🔚",
+  162: "💡",
+  163: "🗣️",
+  164: "▶️",
+  165: "🏳️",
+  166: "✂️",
+  167: "💪",
+  168: "⭐",
+  169: "🌈",
+  170: "⚓",
+  171: "👔",
+  172: "📊",
+  173: "🧩",
+  174: "👁️",
+  175: "❤️",
+  176: "⏸️",
+  177: "👁️",
+  178: "🌱",
+  179: "💰",
+  180: "🕊️",
+  181: "↗️",
+  182: "☝️",
+  183: "💪",
+  184: "🔇",
+  185: "🏋️",
+  186: "🏃",
+  187: "🤝",
+  188: "🛡️",
+  189: "🔓",
+  190: "🗑️",
+  191: "🎯",
+  192: "🪞",
+  193: "🔙",
+  194: "🏡",
+  195: "🤷",
+  196: "📝",
+  197: "📲",
+  198: "📢",
+  199: "📊",
+  200: "🏆",
+  201: "❌",
+  202: "✂️",
+  203: "⚡",
+  204: "🔽",
+  205: "📜",
+  206: "🔎",
+  207: "🚧",
+  208: "✋",
+  209: "✂️",
+  210: "📦",
+  211: "📦",
+  212: "🌟",
+  213: "💥",
+  214: "💬",
+  215: "📌",
+  216: "😎",
+  217: "✈️",
+  218: "✋",
+  219: "☝️",
+  220: "🕵️",
+  221: "⚓",
+  222: "🎁",
+  223: "🔄",
+  224: "⚠️",
+  225: "⭐",
+  226: "🛡️",
+  227: "📌",
+  228: "➕",
+  229: "🪞",
+  230: "🦸",
+  231: "⬆️",
+  232: "📢",
+  233: "🚫",
+  234: "✅",
+  235: "🏗️",
+  236: "🌐",
+  237: "🔄",
+  238: "🔀",
+  239: "🔧",
+  240: "🧬",
+  241: "📌",
+  242: "🤝",
+  243: "🔄",
+  244: "➕",
+  245: "🎯",
+  246: "🏃",
+  247: "🤝",
+  248: "😤",
+  249: "🔗",
+  250: "🤲",
+  251: "💰",
+  252: "🎲",
+  253: "🔍",
+  254: "💪",
+  255: "😟",
+  256: "🤓",
+  257: "↩️",
+  258: "📐",
+  259: "➕",
+  260: "↩️",
+  261: "🙋",
+  262: "🧱",
+  263: "📖",
+  264: "📝",
+  265: "💥",
+  266: "🔗",
+  267: "🧱",
+  268: "✋",
+  269: "🌈",
+  270: "🏡",
+  271: "🤷",
+  272: "📝",
+  273: "🛡️",
+  274: "🎭",
+  275: "🔚",
+  276: "📲",
+  277: "✂️",
+  278: "🌟",
+  279: "🏳️",
+  280: "💡",
+  281: "↗️",
+  282: "☝️",
+  283: "😭",
+  284: "💪",
+  285: "🏳️",
+  286: "🏋️",
+  287: "💰",
+  288: "🕊️",
+  289: "🙈",
+  290: "💥",
+  291: "🔙",
+  292: "👁️",
+  293: "💪",
+  294: "🔇",
+  295: "👆",
+  296: "➕",
+  297: "⚓",
+  298: "📊",
+  299: "🔽",
+  300: "⬇️",
+};
+
+function imgTag(id,cls,tp){
+  if(tp==="pattern"){
+    const em=PATTERN_EMOJI[id]||"📚";
+    return `<div class="${cls}" style="display:flex;align-items:center;justify-content:center;font-size:38px;border-radius:14px;background:rgba(255,255,255,0.1);flex-shrink:0;">${em}</div>`;
+  }
+  const b=_cache[id];
+  if(b)return `<img src="${b}" class="${cls}" data-cid="${id}">`;
+  getImg(id);
+  return `<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="${cls}" data-cid="${id}" style="background:rgba(255,255,255,0.1)">`;
+}
+
+function rStudy(){
+  if(!cur){next();return;}
+  const pp=Math.round((S.l.length/CARDS.length)*100);
+  const gp=Math.min(100,Math.round((S.dc/S.dg)*100));
+  const ip=cur.tp==="pattern";
+  const tc=ip?"#818cf8":"#10b981";
+  const tb=ip?"rgba(99,102,241,0.15)":"rgba(16,185,129,0.15)";
+  const tl=ip?"Kalip":"Kelime";
+  document.getElementById("mc").innerHTML=`
+<div class="pb">
+<div class="pr"><span class="pl">Genel Ilerleme</span><span class="pv" style="color:var(--acc)">${pp}%</span></div>
+<div class="pbar"><div class="pfill" style="width:${pp}%;background:linear-gradient(90deg,var(--acc),#a78bfa)"></div></div>
+<div class="pr"><span class="pl">Gunluk Hedef (${S.dc}/${S.dg})</span><span class="pv" style="color:var(--gr)">${gp}%</span></div>
+<div class="pbar"><div class="pfill" style="width:${gp}%;background:linear-gradient(90deg,var(--gr),#34d399)"></div></div>
+</div>
+<div class="cw" id="cw">
+<div class="ci ${flip?"flip":""}" id="ci" onclick="doFlip()">
+<div class="cf front" style="background:linear-gradient(145deg,${cur.c}28,${cur.c}50);border:1px solid ${cur.c}55;">
+  <div class="ftop">
+    ${imgTag(cur.id,"fimg",cur.tp)}
+    <div class="fwb">
+      <span class="ftag" style="background:${tb};color:${tc};border:1px solid ${tc}44">${tl}</span>
+      <div class="fw">${cur.w}</div>
+    </div>
+  </div>
+  <div class="fdiv"></div>
+  <div class="sarow">
+    <div class="sabox syn">
+      <div class="salbl slbl">Es Anlam</div>
+      <div class="saw">${cur.sw}</div>
+      <div class="saex">"${cur.se}"</div>
+    </div>
+    <div class="sabox ant">
+      <div class="salbl albl">Zit Anlam</div>
+      <div class="saw">${cur.aw}</div>
+      <div class="saex">"${cur.ae}"</div>
+    </div>
+  </div>
+  <div class="flbl">Ornek Cumleler</div>
+  <div class="fs">"${cur.e}"</div>
+  <div class="fs">"${cur.e2}"</div>
+  <div class="hint">Turkce icin cevir</div>
+</div>
+<div class="cf back">
+  <div class="bl">Turkce Anlami</div>
+  <div class="bm">${cur.tr}</div>
+  <div class="bdv"></div>
+  <div class="bl">Cumle Cevirileri</div>
+  <div class="be">"${cur.e}"</div>
+  <div class="bt">= ${cur.t}</div>
+  <div class="be">"${cur.e2}"</div>
+  <div class="bt">= ${cur.t2}</div>
+</div>
+</div>
+</div>
+<div class="brow">
+<button class="btn bg" onclick="markL()">V<br>Ogrend.</button>
+<button class="btn ba" onclick="markR()">R<br>Tekrar</button>
+<button class="btn br" onclick="markS()">X<br>Zorlandi</button>
+</div>`;
+  preload();
+}
+
+function doFlip(){flip=!flip;const i=document.getElementById("ci");if(i)i.classList.toggle("flip",flip);}
+
+function rList(tp){
+  const tt={l:"Ogrenilenler",r:"Tekrar",s:"Zorlandiklarim"};
+  const cl={l:"var(--gr)",r:"var(--am)",s:"var(--rd)"};
+  const ids=S[tp];
+  const all=CARDS.filter(c=>ids.includes(c.id));
+  const ws=all.filter(c=>c.tp==="word");
+  const ps=all.filter(c=>c.tp==="pattern");
+  const fil=filt==="word"?ws:filt==="pattern"?ps:all;
+  document.getElementById("mc").innerHTML=`
+<div class="stit">${tt[tp]} (${ids.length})</div>
+<div class="fr">
+<button class="fb ${filt==="all"?"act":""}" onclick="sf('all')">Tumu (${all.length})</button>
+<button class="fb ${filt==="word"?"act":""}" onclick="sf('word')">Kelime (${ws.length})</button>
+<button class="fb ${filt==="pattern"?"act":""}" onclick="sf('pattern')">Kalip (${ps.length})</button>
+</div>
+${fil.length===0?`<div class="empty"><div style="font-size:40px;margin-bottom:10px">📭</div><div>Henuz kelime yok</div></div>`
+:`<div class="wl">${fil.map(c=>`
+<div class="wi">
+  ${imgTag(c.id,"wimg",c.tp)}
+  <div style="flex:1"><div class="wen" style="color:${c.c}">${c.w}</div><div class="wtr">${c.tr}</div></div>
+  <div class="dot" style="background:${cl[tp]}"></div>
+</div>`).join("")}</div>`}`;
+}
+
+function sf(f){filt=f;rList(tab);}
+
+function rStats(){
+  const pp=Math.round((S.l.length/CARDS.length)*100);
+  document.getElementById("mc").innerHTML=`
+<div class="sg">
+  <div class="sc"><div style="font-size:22px">✅</div><div class="sn" style="color:var(--gr)">${S.l.length}</div><div class="sl">Ogrenilenler</div></div>
+  <div class="sc"><div style="font-size:22px">🔄</div><div class="sn" style="color:var(--am)">${S.r.length}</div><div class="sl">Tekrar</div></div>
+  <div class="sc"><div style="font-size:22px">💪</div><div class="sn" style="color:var(--rd)">${S.s.length}</div><div class="sl">Zorlandi</div></div>
+  <div class="sc"><div style="font-size:22px">🔥</div><div class="sn" style="color:#f97316">${S.st}</div><div class="sl">Gun Serisi</div></div>
+</div>
+<div class="pb">
+  <div style="font-weight:700;font-size:14px;margin-bottom:10px">Toplam Ilerleme</div>
+  <div class="pr"><span class="pl">${S.l.length}/${CARDS.length}</span><span class="pv" style="color:var(--acc)">${pp}%</span></div>
+  <div class="pbar"><div class="pfill" style="width:${pp}%;background:linear-gradient(90deg,var(--acc),#a78bfa)"></div></div>
+  <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Toplam kart</span><strong>${CARDS.length}</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Kelimeler</span><strong>${CARDS.filter(c=>c.tp==="word").length}</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Kaliplar</span><strong>${CARDS.filter(c=>c.tp==="pattern").length}</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Bugun</span><strong>${S.dc} kart</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Hedef</span><strong>${S.dg} kart</strong></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--sub)">Kaynak</span><strong>Erca Hoca</strong></div>
+  </div>
+</div>`;
+}
+
+function rSettings(){
+  document.getElementById("mc").innerHTML=`
+<div class="sr" onclick="togDark()">
+  <span style="font-size:14px;font-weight:600">${S.dm?"Karanlik Mod":"Aydinlik Mod"}</span>
+  <div class="tgl" style="background:${S.dm?"var(--acc)":"var(--sf2)"}"><div class="tk" style="left:${S.dm?"22px":"2px"}"></div></div>
+</div>
+<div class="sr" onclick="openM()">
+  <span style="font-size:14px;font-weight:600">Gunluk Hedef</span>
+  <span style="font-weight:700;color:var(--acc)">${S.dg} kart</span>
+</div>
+<div class="sr" onclick="resetAll()">
+  <span style="font-size:14px;font-weight:600;color:var(--rd)">Ilerlemeyi Sifirla</span>
+</div>
+<div class="pb" style="margin-top:8px">
+  <div style="font-weight:700;font-size:12px;color:var(--sub);margin-bottom:8px">BILGI</div>
+  <div style="font-size:13px;color:var(--sub);line-height:2">
+    Toplam: <strong style="color:var(--tx)">${CARDS.length} kart</strong><br>
+    Kelime: <strong style="color:var(--tx)">${CARDS.filter(c=>c.tp==="word").length}</strong><br>
+    Kalip: <strong style="color:var(--tx)">${CARDS.filter(c=>c.tp==="pattern").length}</strong><br>
+    Kaynak: <strong style="color:var(--tx)">Erca Hoca Kelime Kitabi</strong>
+  </div>
+</div>`;
+}
+
+function togDark(){S.dm=!S.dm;document.body.classList.toggle("light",!S.dm);saveS();rSettings();}
+function openM(){document.getElementById("gi").value=S.dg;document.getElementById("modal").style.display="flex";}
+function closeM(){document.getElementById("modal").style.display="none";}
+function saveG(){const v=parseInt(document.getElementById("gi").value);if(v>0&&v<=200){S.dg=v;saveS();}closeM();if(tab==="settings")rSettings();}
+function resetAll(){if(confirm("Tum ilerleme silinecek. Emin misiniz?")){S={l:[],r:[],s:[],si:{},st:0,ld:null,dg:S.dg,dc:0,dd:td(),dm:S.dm};saveS();cur=null;uh();st("study");}}
+
+if(!S.dm)document.body.classList.add("light");
+uh();
+next();
+
+</script>
+</body>
+</html>
